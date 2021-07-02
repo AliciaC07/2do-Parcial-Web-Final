@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Alfa Slab One';
+    src: local('../Fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf'), url("../Fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf") format('truetype');
+}
+
+.titleFont{
+    font-family: "Alfa Slab One", monospace;
+}
