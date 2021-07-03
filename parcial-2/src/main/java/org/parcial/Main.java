@@ -11,7 +11,8 @@ import org.parcial.controllers.UserController;
 public class Main {
     public static void main(String[] args){
         Javalin app = Javalin.create(config -> {
-            config.registerPlugin(new RouteOverviewPlugin("/rutas"));
+            config.registerPlugin(new RouteOverviewPlugin("/public"));
+            config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
         }).start(7000);

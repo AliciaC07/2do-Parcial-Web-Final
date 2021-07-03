@@ -55,7 +55,7 @@
         <div class="container-fluid col-md mt-3">
             <div class="card mx-auto my-auto shadow-lg p-3 mb-5 bg-body rounded">
                 #if($cuttedUrl == "")
-                <form method="post" action="/shortener/reg-url">
+                <form method="post" action="/shortener/register/reg-url">
                     <div class=" input-group input-group-lg ">
                         <input type="text" name="originalUrl" id="url" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
                         <button class="btn btn-outline-primary" type="submit" id="button-addon2">Shorten</button>
@@ -64,7 +64,7 @@
                 #else
                 <div class=" input-group input-group-lg ">
                     <input type="text" name="cuttedUrl" id="urlCutted" value="$urlCut" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <a class="btn btn-outline-primary" type="button" href="/shortener/$hashUrl" id="button-addon3">Go</a>
+                    <a class="btn btn-outline-primary" type="button" href="/$hashUrl" id="button-addon3">Go</a>
                 </div>
                 #end
             </div>
