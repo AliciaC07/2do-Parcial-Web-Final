@@ -32,6 +32,18 @@ public class UrlService extends Repository<Url> {
         return  url.get(0);
 
     }
+    public Url findUrlByHash(String hash){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("select u from Url u where u.cuttedUrl = :hashed");
+        query.setParameter("hashed", hash);
+        List<Url> url = query.getResultList();
+        if (url.isEmpty()){
+            System.out.println("Nada");
+            return null;
+        }
+        return  url.get(0);
+
+    }
 
 
 }
