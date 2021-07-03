@@ -1,6 +1,9 @@
 package org.parcial.controllers;
 
 import eu.bitwalker.useragentutils.UserAgent;
+import inet.ipaddr.IPAddress;
+import inet.ipaddr.IPAddressString;
+import inet.ipaddr.ipv6.IPv6Address;
 import io.javalin.Javalin;
 import org.parcial.config.UrlEncodeShort;
 import org.parcial.models.Url;
@@ -8,15 +11,21 @@ import org.parcial.models.User;
 import org.parcial.models.Visit;
 import org.parcial.services.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
+import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
-public class Shortener {
+public class ShortenerController {
     private final Javalin app;
     Principal principal = Principal.getInstance();
     private UserService userService = UserService.getInstance();
@@ -24,13 +33,63 @@ public class Shortener {
     private VisitService visitService = VisitService.getInstance();
     private CookieVerificationService cookieVerificationService = CookieVerificationService.getInstance();
 
-    public Shortener(Javalin app) {
+    public ShortenerController(Javalin app) {
         this.app = app;
     }
     public void applyRoutes(){
+
         app.routes(() ->{
             path("/shortener", () ->{
                 get("/", ctx -> {
+                    Map<String, Object> model = new HashMap<>();
+                    model.put("cuttedUrl", "");
+                    if ( ctx.cookie("userToken") != null){
+
+                        Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                        if (cookie.get("user") == null){
+                            model.put("logged", false);
+                        }else {
+                            if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                                model.put("logged", true);
+                            }else{
+                                model.put("logged", false);
+                            }
+                        }
+
+                    }else if (ctx.sessionAttribute("user") != null){
+                        model.put("logged", true);
+                    }else {
+                        model.put("logged", false);
+                    }
+                    ctx.render("/public/html/landing.html", model);
+
+
+                });
+                get("/generated/:cut", ctx -> {
+                    Map<String, Object> model = new HashMap<>();
+                    Url url  = urlService.findUrlByHash(ctx.pathParam("cut"));
+                    if ( ctx.cookie("userToken") != null){
+
+                        Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                        if (cookie.get("user") == null){
+                            model.put("logged", false);
+                        }else {
+                            if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                                model.put("logged", true);
+                            }else{
+                                model.put("logged", false);
+                            }
+                        }
+
+                    }else if (ctx.sessionAttribute("user") != null){
+                        model.put("logged", true);
+                    }else {
+                        model.put("logged", false);
+                    }
+                    model.put("cuttedUrl", url.getCuttedUrl());
+                    model.put("hashUrl", url.getCuttedUrl());
+                    model.put("urlCut", "localhost:7000/shortener/"+url.getCuttedUrl());
+                    ctx.render("/public/html/landing.html", model);
 
 
                 });
@@ -41,6 +100,8 @@ public class Shortener {
                     String shortened = urlEncodeShort.encodeUrl(originalUrl);
                     url.setOriginalUrl(urlEncodeShort.decodeUrl(shortened));
                     url.setCuttedUrl(shortened);
+                    System.out.println(url.getOriginalUrl());
+                    System.out.println(url.getCuttedUrl());
                     User user = null;
                     if ( ctx.cookie("userToken") != null){
 
@@ -69,20 +130,23 @@ public class Shortener {
 
                     }
                     ////hacer redirect a la pagina
+                    ctx.redirect("/shortener/generated/"+url.getCuttedUrl());
 
                 });
-                get("/redirect/:keyHash", ctx -> {
+                get("/:keyHash", ctx -> {
                     String shorted = ctx.pathParam("keyHash");
                     Url url = urlService.findUrlByHash(shorted);
                     if (url != null){
                         String userAgent = ctx.userAgent();
                         UserAgent userAgentP = UserAgent.parseUserAgentString(userAgent);
+
                         System.out.println(userAgentP.getOperatingSystem());
                         System.out.println(userAgentP.getBrowser());
                         Visit visit = new Visit();
                         visit.setUrlVisit(url);
                         visit.setBrowser(userAgentP.getBrowser().getName());
                         visit.setIp(ctx.ip());
+                        System.out.println(ctx.ip());
                         visit.setDateTime(LocalDateTime.now());
                         visitService.create(visit);
 
@@ -90,6 +154,7 @@ public class Shortener {
 
                     }else {
                         ////como no existe redirecionarlo al home
+                        ctx.redirect("/shortener");
 
                     }
 

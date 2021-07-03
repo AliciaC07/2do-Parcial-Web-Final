@@ -1,9 +1,13 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
+
+mainClassName = 'org.parcial.Main'
 
 repositories {
     mavenCentral()
@@ -35,8 +39,18 @@ dependencies {
             'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
     compile 'com.h2database:h2:1.4.200'
     compile "eu.bitwalker:UserAgentUtils:1.21"
+    compile "org.apache.velocity:velocity-engine-core:2.2"
+    implementation 'com.github.seancfoley:ipaddress:5.3.3'
 }
+shadowJar{
+    archivesBaseName = 'app'
+    archiveClassifier = ''
+    archiveVersion = ''
+}
+task stage{
+    dependsOn shadowJar
 
+}
 test {
     useJUnitPlatform()
 }
