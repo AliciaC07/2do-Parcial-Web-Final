@@ -120,6 +120,54 @@ public class UserController {
                     ctx.redirect("/shortener");
                 });
 
+                get("/delete/:id", ctx -> {
+                    Integer id = ctx.pathParam("id", Integer.class).get();
+                    User user = userService.findById(id);
+                    if (user != null){
+                        user.setActive(false);
+                        userService.edit(user);
+                    }else {
+                        ///redirect ese user no existe
+                        System.out.println("No existe");
+                    }
+                });
+                get("/edit/:id", ctx -> {
+                    Map<String, Object> model = new HashMap<>();
+                    if ( ctx.cookie("userToken") != null){
+
+                        Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                        if (cookie.get("user") == null){
+                            model.put("logged", false);
+                        }else {
+                            if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                                model.put("logged", true);
+                            }else{
+                                model.put("logged", false);
+                            }
+                        }
+
+                    }else if (ctx.sessionAttribute("user") != null){
+                        model.put("logged", true);
+                    }else {
+                        model.put("logged", false);
+                    }
+
+                    ctx.render("/public/html", model);
+                });
+                post("/edit/:id", ctx -> {
+                    Integer id = ctx.pathParam("id", Integer.class).get();
+                    User user = userService.findById(id);
+                    if (user != null){
+                        if (ctx.formParam("role") != null){
+                            user.setRol("Admin");
+                            userService.edit(user);
+                        }else {
+                            user.setRol("No asignado");
+                            userService.edit(user);
+                        }
+                    }
+                });
+
             });
         });
 

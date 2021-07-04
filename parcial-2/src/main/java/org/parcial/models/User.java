@@ -22,6 +22,9 @@ public class User implements Serializable {
     @Column
     private String rol;
 
+    @Column
+    private Boolean active = true;
+
     @OneToMany(mappedBy = "user")
     List<Url> urls = new ArrayList<>();
 
