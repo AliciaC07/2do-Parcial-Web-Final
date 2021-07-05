@@ -27,19 +27,20 @@ public class UserController {
 
         app.routes(() -> {
             path("/user", () ->{
-                get("/", ctx -> {
+                get("/login", ctx -> {
                     Map<String, Object> model = new HashMap<>();
                     model.put("title", "Loging");
                     if (ctx.cookie("userToken") != null){
                         //Haqcer validacion
-                        //ctx.redirect("/product");
+                        ctx.redirect("/shortener");
                     }else if (ctx.sessionAttribute("user") != null){
-                        //ctx.redirect("/product");
+                        ctx.redirect("/shortener");
                     }
-                    ctx.render("/public/login.html",model);
+                    model.put("logged", false);
+                    ctx.render("/public/html/login.html",model);
                 });
                 post("/login", ctx -> {
-                    String userName = ctx.formParam("userName");
+                    String userName = ctx.formParam("email");
                     String password = ctx.formParam("password");
 
                     if (userName == null || password == null){
@@ -70,16 +71,24 @@ public class UserController {
 
                     }
                     //Haccer redirect
-                    ///ctx.redirect("/product");
+                    ctx.redirect("/shortener");
 
                 });
                 get("/register", ctx -> {
                     Map<String, Object> model = new HashMap<>();
                     model.put("title", "Register");
                     //hacer render al html del registrar
+                    if (ctx.cookie("userToken") != null){
+                        //Haqcer validacion
+                        ctx.redirect("/shortener");
+                    }else if (ctx.sessionAttribute("user") != null){
+                        ctx.redirect("/shortener");
+                    }
+                    model.put("logged", false);
+                    ctx.render("/public/html/CreateUser.html",model);
                 });
                 post("/register", ctx -> {
-                    String userName = ctx.formParam("userName");
+                    String userName = ctx.formParam("email");
                     String password = ctx.formParam("password");
                     String role = "No asignado";
                     User newUser = new User();
@@ -94,7 +103,69 @@ public class UserController {
                         userService.create(newUser);
                     }
                     ///hacer redirect al login para que se loguee ya que fue creado el usuario
+                    ctx.result("Dique funciono");
+                    ctx.redirect("/user/login");
 
+                });
+                get("/logout", ctx -> {
+
+                    if (ctx.cookie("userToken") != null){
+
+                        cookieVerificationService.delete(cookieVerificationService.findByCookieTokenVeri(ctx.cookie("userToken")).getId());
+                        ctx.removeCookie("userToken","/");
+                    }
+                    if (ctx.sessionAttribute("user") != null){
+                        ctx.req.getSession().invalidate();
+                    }
+                    ctx.redirect("/shortener");
+                });
+
+                get("/delete/:id", ctx -> {
+                    Integer id = ctx.pathParam("id", Integer.class).get();
+                    User user = userService.findById(id);
+                    if (user != null){
+                        user.setActive(false);
+                        userService.edit(user);
+                    }else {
+                        ///redirect ese user no existe
+                        System.out.println("No existe");
+                    }
+                });
+                get("/edit/:id", ctx -> {
+                    Map<String, Object> model = new HashMap<>();
+                    if ( ctx.cookie("userToken") != null){
+
+                        Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                        if (cookie.get("user") == null){
+                            model.put("logged", false);
+                        }else {
+                            if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                                model.put("logged", true);
+                            }else{
+                                model.put("logged", false);
+                            }
+                        }
+
+                    }else if (ctx.sessionAttribute("user") != null){
+                        model.put("logged", true);
+                    }else {
+                        model.put("logged", false);
+                    }
+
+                    ctx.render("/public/html", model);
+                });
+                post("/edit/:id", ctx -> {
+                    Integer id = ctx.pathParam("id", Integer.class).get();
+                    User user = userService.findById(id);
+                    if (user != null){
+                        if (ctx.formParam("role") != null){
+                            user.setRol("Admin");
+                            userService.edit(user);
+                        }else {
+                            user.setRol("No asignado");
+                            userService.edit(user);
+                        }
+                    }
                 });
 
             });

@@ -23,8 +23,20 @@ public class UserService  extends Repository<User> {
     }
     public User findByUserName(String username){
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createQuery("select u from app_user u where u.userName = :username");
+        Query query = entityManager.createQuery("select u from app_user u where u.userName = :username and u.active = true ");
         query.setParameter("username", username);
+        List<User> user = query.getResultList();
+        if (user.isEmpty()){
+            System.out.println("Nada");
+            return null;
+        }
+        return  user.get(0);
+
+    }
+    public User findById(Integer id){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("select u from app_user u where u.id = :id and u.active = true ");
+        query.setParameter("id", id);
         List<User> user = query.getResultList();
         if (user.isEmpty()){
             System.out.println("Nada");
