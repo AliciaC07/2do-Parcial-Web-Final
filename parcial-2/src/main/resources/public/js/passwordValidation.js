@@ -12,5 +12,7 @@ function areEqual(e){
 
     if(passwordCheck.normalize().trim() === password.normalize().trim()){
         e.unbind('submit').submit();
+    }else{
+        alert("Password are not the same");
     }
 }
