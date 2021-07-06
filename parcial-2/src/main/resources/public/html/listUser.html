@@ -80,16 +80,40 @@
                 </table>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
+                        #foreach($page in $pages)
+                        #if($page == 1)
+                        #set($previousPage = $currentPage - 1)
                         <li class="page-item">
-                            <a class="page-link" href="#">Previous</a>
+                            #if($!{currentPage} == 1)
+                            <a class="page-link"  href="/user/users?pag=$currentPage">Previous</a>
+                            #else
+                            <a class="page-link"  href="/user/users?pag=$previousPage">Previous</a>
+                            #end
+
                         </li>
+                        #end
 
+                        #if($page == $currentPage)
+                        <li class="page-item active"><a class="page-link" href="#">$page</a></li>
+                        #end
+                        #if($page != $currentPage && $page != -1)
+                        <li class="page-item "><a class="page-link" href="/user/users?pag=$page">$page</a></li>
+                        #end
+                        #if($page == -1)
+                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                        #end
 
-                        <li class="page-item"><a class="page-link" href="#"></a></li>
-
+                        #if($page == $totalPages)
+                        #set($nextPage = $currentPage + 1)
                         <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
+                            #if($currentPage == $totalPages)
+                            <a class="page-link" href="/user/users?pag=$currentPage">Next</a>
+                            #else
+                            <a class="page-link" href="/user/users?pag=$nextPage">Next</a>
+                            #end
                         </li>
+                        #end
+                        #end <!-- foreach end -->
                     </ul>
                 </nav>
             </div>

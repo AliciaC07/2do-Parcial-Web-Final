@@ -52,6 +52,15 @@ public class UserService  extends Repository<User> {
         return users;
 
     }
+    public List<User> findAllByActiveTruePagination(int pageSize, int lastPageNumber){
+        EntityManager entityManager = getEntityManager();
+        Query selectQuery = entityManager.createQuery("select p from app_user p where p.active = true");
+        selectQuery.setFirstResult((lastPageNumber - 1) * pageSize);
+        selectQuery.setMaxResults(pageSize);
+        List<User> lastPage = selectQuery.getResultList();
+        return lastPage;
+
+    }
     public User authUser(String userName, String password){
         User user = findByUserName(userName);
         if (user == null){
