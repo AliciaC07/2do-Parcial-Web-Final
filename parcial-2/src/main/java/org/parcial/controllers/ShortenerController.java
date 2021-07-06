@@ -33,24 +33,34 @@ public class ShortenerController {
             app.get("/shorty/:cut", ctx -> {
                 Map<String, Object> model = new HashMap<>();
                 Url url  = urlService.findUrlByHash(ctx.pathParam("cut"));
+                User userLogged = new User();
                 if ( ctx.cookie("userToken") != null){
 
                     Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
                     if (cookie.get("user") == null){
                         model.put("logged", false);
+                        model.put("userRole", "");
                     }else {
                         if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
                             model.put("logged", true);
+                            userLogged = userService.findByUserName(cookie.get("user"));
+                            model.put("userRole", userLogged.getRol());
                         }else{
                             model.put("logged", false);
+                            model.put("userRole", "");
                         }
                     }
 
                 }else if (ctx.sessionAttribute("user") != null){
                     model.put("logged", true);
+                    userLogged = ctx.sessionAttribute("user");
+                    userLogged = userService.findByUserName(userLogged.getUserName());
+                    model.put("userRole", userLogged.getRol());
                 }else {
                     model.put("logged", false);
+                    model.put("userRole", "");
                 }
+
                 model.put("cuttedUrl", url.getCuttedUrl());
                 model.put("hashUrl", url.getCuttedUrl());
                 model.put("urlCut", "localhost:7000/"+url.getCuttedUrl());
@@ -69,24 +79,33 @@ public class ShortenerController {
             app.get("/shortener/shorty", ctx -> {
                     Map<String, Object> model = new HashMap<>();
                     model.put("cuttedUrl", "");
-                    if ( ctx.cookie("userToken") != null){
+                User userLogged = new User();
+                if ( ctx.cookie("userToken") != null){
 
-                        Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
-                        if (cookie.get("user") == null){
-                            model.put("logged", false);
-                        }else {
-                            if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
-                                model.put("logged", true);
-                            }else{
-                                model.put("logged", false);
-                            }
-                        }
-
-                    }else if (ctx.sessionAttribute("user") != null){
-                        model.put("logged", true);
-                    }else {
+                    Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                    if (cookie.get("user") == null){
                         model.put("logged", false);
+                        model.put("userRole", "");
+                    }else {
+                        if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                            model.put("logged", true);
+                            userLogged = userService.findByUserName(cookie.get("user"));
+                            model.put("userRole", userLogged.getRol());
+                        }else{
+                            model.put("logged", false);
+                            model.put("userRole", "");
+                        }
                     }
+
+                }else if (ctx.sessionAttribute("user") != null){
+                    model.put("logged", true);
+                    userLogged = ctx.sessionAttribute("user");
+                    userLogged = userService.findByUserName(userLogged.getUserName());
+                    model.put("userRole", userLogged.getRol());
+                }else {
+                    model.put("logged", false);
+                    model.put("userRole", "");
+                }
                     ctx.render("/public/html/landing.html", model);
 
 

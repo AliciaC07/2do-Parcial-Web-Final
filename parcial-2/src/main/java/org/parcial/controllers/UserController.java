@@ -9,6 +9,7 @@ import org.parcial.services.Principal;
 import org.parcial.services.UserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.javalin.apibuilder.ApiBuilder.path;
@@ -26,8 +27,8 @@ public class UserController {
     public void applyRoutes(){
 
         app.routes(() -> {
-            path("/user", () ->{
-                get("/login", ctx -> {
+
+            app.get("/user/login", ctx -> {
                     Map<String, Object> model = new HashMap<>();
                     model.put("title", "Loging");
                     if (ctx.cookie("userToken") != null){
@@ -39,7 +40,49 @@ public class UserController {
                     model.put("logged", false);
                     ctx.render("/public/html/login.html",model);
                 });
-                post("/login", ctx -> {
+
+            app.get("/user/users", ctx -> {
+                    Map<String, Object> model = new HashMap<>();
+                    User userLogged = null;
+                    if ( ctx.cookie("userToken") != null){
+
+                        Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                        if (cookie.get("user") == null){
+                            model.put("logged", false);
+                            ctx.redirect("/user/login");
+                            return;
+                        }else {
+                            if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                                model.put("logged", true);
+                                userLogged = userService.findByUserName(cookie.get("user"));
+                            }else{
+                                model.put("logged", false);
+                                ctx.redirect("/user/login");
+                                return;
+                            }
+                        }
+
+                    }else if (ctx.sessionAttribute("user") != null){
+                        model.put("logged", true);
+                        userLogged = ctx.sessionAttribute("user");
+                        userLogged = userService.findByUserName(userLogged.getUserName());
+                    }else {
+                        model.put("logged", false);
+                        ctx.redirect("/user/login");
+                        return;
+                    }
+                    if (!userLogged.getRol().equalsIgnoreCase("Admin")){
+                        ctx.redirect("/shortener");
+                        return;
+                    }
+
+                     model.put("users", userService.findAllUsersByActive());
+                     model.put("userLoggedId", userLogged.getId());
+                     model.put("userRole", userLogged.getRol());
+
+                    ctx.render("/public/html/listUser.html", model);
+                });
+            app.post("/user/login", ctx -> {
                     String userName = ctx.formParam("email");
                     String password = ctx.formParam("password");
 
@@ -50,7 +93,7 @@ public class UserController {
                     User userLog = userService.authUser(userName,password);
                     if (userLog != null){
 
-                        if (ctx.formParam("signed") != null){
+                        if (ctx.formParam("signedIn") != null){
                             String tokenCookie = principal.tokenCreated(userLog);
                             ctx.cookie("userToken", tokenCookie);
                             Map<String, String> cookieFound = cookieVerificationService.findByCookieUsername(userLog.getUserName());
@@ -74,7 +117,7 @@ public class UserController {
                     ctx.redirect("/shortener");
 
                 });
-                get("/register", ctx -> {
+            app.get("/user/register", ctx -> {
                     Map<String, Object> model = new HashMap<>();
                     model.put("title", "Register");
                     //hacer render al html del registrar
@@ -87,10 +130,10 @@ public class UserController {
                     model.put("logged", false);
                     ctx.render("/public/html/CreateUser.html",model);
                 });
-                post("/register", ctx -> {
+            app.post("/user/register", ctx -> {
                     String userName = ctx.formParam("email");
                     String password = ctx.formParam("password");
-                    String role = "No asignado";
+                    String role = "User";
                     User newUser = new User();
                     newUser.setUserName(userName);
                     StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
@@ -99,6 +142,8 @@ public class UserController {
                     if (userService.findByUserName(userName) != null){
                         System.out.println("User Already exist");
                         //hacer un redirect o un html comunicando ese error
+                        ctx.redirect("/user/register");
+                        return;
                     }else {
                         userService.create(newUser);
                     }
@@ -107,7 +152,7 @@ public class UserController {
                     ctx.redirect("/user/login");
 
                 });
-                get("/logout", ctx -> {
+            app.get("/user/logout", ctx -> {
 
                     if (ctx.cookie("userToken") != null){
 
@@ -120,7 +165,7 @@ public class UserController {
                     ctx.redirect("/shortener");
                 });
 
-                get("/delete/:id", ctx -> {
+            app.get("/user/delete/:id", ctx -> {
                     Integer id = ctx.pathParam("id", Integer.class).get();
                     User user = userService.findById(id);
                     if (user != null){
@@ -130,31 +175,50 @@ public class UserController {
                         ///redirect ese user no existe
                         System.out.println("No existe");
                     }
+                    ctx.redirect("/user/users");
                 });
-                get("/edit/:id", ctx -> {
+            app.get("/user/edit/:id", ctx -> {
                     Map<String, Object> model = new HashMap<>();
+                    User userLogged = new User();
                     if ( ctx.cookie("userToken") != null){
 
                         Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
                         if (cookie.get("user") == null){
                             model.put("logged", false);
+                            model.put("userRole", "");
+                            ctx.redirect("/user/login");
+                            return;
                         }else {
                             if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
                                 model.put("logged", true);
+                                userLogged = userService.findByUserName(cookie.get("user"));
+                                model.put("userRole", userLogged.getRol());
                             }else{
                                 model.put("logged", false);
+                                ctx.redirect("/user/login");
+                                return;
                             }
                         }
 
                     }else if (ctx.sessionAttribute("user") != null){
                         model.put("logged", true);
+                        userLogged = ctx.sessionAttribute("user");
+                        userLogged = userService.findByUserName(userLogged.getUserName());
+                        model.put("userRole", userLogged.getRol());
                     }else {
                         model.put("logged", false);
+                        ctx.redirect("/user/login");
+                        return;
                     }
-
-                    ctx.render("/public/html", model);
+                    if (!userLogged.getRol().equalsIgnoreCase("Admin")){
+                        ctx.redirect("/shortener");
+                        return;
+                    }
+                   User editUser = userService.findById(ctx.pathParam("id", Integer.class).get());
+                    model.put("user", editUser);
+                    ctx.render("/public/html/editUser.html", model);
                 });
-                post("/edit/:id", ctx -> {
+            app.post("/user/edit/:id", ctx -> {
                     Integer id = ctx.pathParam("id", Integer.class).get();
                     User user = userService.findById(id);
                     if (user != null){
@@ -166,9 +230,10 @@ public class UserController {
                             userService.edit(user);
                         }
                     }
+                    ctx.redirect("/user/users");
                 });
 
-            });
+
         });
 
 

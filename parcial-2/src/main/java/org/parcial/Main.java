@@ -4,9 +4,12 @@ import io.javalin.Javalin;
 import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinVelocity;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.config.UrlEncodeShort;
 import org.parcial.controllers.ShortenerController;
 import org.parcial.controllers.UserController;
+import org.parcial.models.User;
+import org.parcial.services.UserService;
 
 public class Main {
     public static void main(String[] args){
@@ -23,10 +26,11 @@ public class Main {
         });
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
-        UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
-        String url = "https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync/4.2.3";
-        String urlshorte = urlEncodeShort.encodeUrl(url);
-        System.out.println(urlshorte);
-        System.out.println(urlEncodeShort.decodeUrl(urlshorte));
+        StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
+        User user = new User(null, "alicruz0703@gmail.com", spe.encryptPassword("123"), "Admin");
+        UserService.getInstance().create(user);
+        User otro = new User(null, "123@gmail.com", spe.encryptPassword("123"),"User");
+        UserService.getInstance().create(otro);
+
     }
 }
