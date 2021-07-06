@@ -1,4 +1,3 @@
-
 let form = document.getElementById("form");
 let myEvent = function (event){
     ev.preventDefault();
@@ -11,6 +10,7 @@ function areEqual(e, form){
     let password = document.getElementById("password").value;
     let passwordCheck = document.getElementById("passwordCheck").value;
     
+
 
     if(passwordCheck.normalize().trim() === password.normalize().trim()){
         form.removeEventlistener('submit', myEvent);

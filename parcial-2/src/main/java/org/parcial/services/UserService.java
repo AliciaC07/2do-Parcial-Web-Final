@@ -45,6 +45,13 @@ public class UserService  extends Repository<User> {
         return  user.get(0);
 
     }
+    public List<User> findAllUsersByActive(){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT p from app_user p WHERE p.active = true", User.class);
+        List<User> users = query.getResultList();
+        return users;
+
+    }
     public User authUser(String userName, String password){
         User user = findByUserName(userName);
         if (user == null){

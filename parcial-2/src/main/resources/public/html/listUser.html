@@ -33,6 +33,9 @@
                             Options
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            #if($userRole == "Admin")
+                            <li><a class="dropdown-item" href="#">User List</a></li>
+                            #end
                             <li><a class="dropdown-item" href="/user/logout">Log out</a></li>
                         </ul>
                     </li>
@@ -60,17 +63,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!--#foreach($user in $users)-->
+                    #foreach($user in $users)
+                    #if($userLoggedId != $user.id)
                     <tr>
                         <th scope="row">$user.id</th>
-                        <td>$user.email</td>
-                        <td>$user.role</td>
+                        <td>$user.userName</td>
+                        <td>$user.rol</td>
                         <td>
-                            <a class="btn btn-warning btn-sm" href="url/$!{user.id}">Edit</a>
-                            <a class="btn btn-danger btn-sm" href="url/$!{user.id}">Delete</a>
+                            <a class="btn btn-warning btn-sm" href="/user/edit/$!{user.id}">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="/user/delete/$!{user.id}">Delete</a>
                         </td>
                     </tr>
-                    <!--#end-->
+                    #end
+                    #end
                     </tbody>
                 </table>
                 <nav aria-label="Page navigation example">
@@ -79,9 +84,9 @@
                             <a class="page-link" href="#">Previous</a>
                         </li>
 
-                        <!--#foreach($number in range $paginationSize)-->
-                        <li class="page-item"><a class="page-link" href="#">$number</a></li>
-                        <!--#end-->
+
+                        <li class="page-item"><a class="page-link" href="#"></a></li>
+
                         <li class="page-item">
                             <a class="page-link" href="#">Next</a>
                         </li>
