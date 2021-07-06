@@ -1,17 +1,18 @@
 google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawBasic);
+google.charts.setOnLoadCallback(drawOS);
 
-function drawBasic() {
+function drawOS() {
 
     var data = new google.visualization.arrayToDataTable([
-        ['Date', 'Total Clicks'],
-        ['Past yesterday', 48],
-        ['Yesterday', 30],
-        ['Today', 10]
+        ['OS', 'Total Clicks'],
+        ['Windows', 48],
+        ['Ubuntu', 30],
+        ['Arch Linux', 10],
+        ['OS X', 38]
     ]);
     var options = {
         hAxis: {
-            title: 'Day',
+            title: 'OS',
         },
         vAxis: {
             title: 'Total Clicks'
@@ -19,9 +20,9 @@ function drawBasic() {
     };
 
     var chart = new google.visualization.ColumnChart(
-        document.getElementById('chart_div'));
+        document.getElementById('OS_graph'));
 
     chart.draw(data, options);
 }
 
-window.onresize = drawBasic;
+window.onresize = drawOS;

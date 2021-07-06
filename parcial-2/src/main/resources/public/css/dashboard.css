@@ -4,6 +4,15 @@
     font-family: "Inconsolata", monospace;
     font-size: x-large;
 }
+.url-card-title{
+    font-family: "Alfa Slab One", monospace;
+    font-size: small;
+}
+
+.url-font{
+    font-family: "Inconsolata", monospace;
+    font-size: medium;
+}
 
 .number-url-card{
     background-color: #f8f9fa;

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="../css/fonts.css">
     <link rel="stylesheet" type="text/css" href="../css/dashboard.css">
     <meta charset="UTF-8">
@@ -110,14 +111,80 @@
                         <div class="col-md-2"></div>
                     </div>
             <!-- Tabla con los urls -->
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md card mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title titleFont text-muted">Urls</h5>
+                                #foreach($url in $urls)
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <p class="url-card-title text-muted col-md-9">Original Link<br><a class="url-font" href="$!{url.originalUrl}">$url.originalUrl</a></p>
+                                            <p class="col-md url-font text-muted text-end">$url.visits.size()</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="url-card-title text-muted">Shortened url<br><a class="url-font" href="$!{$url.cuttedUrl}">$url.cuttedUrl</a></p>
+                                        </div>
+                                        <div class="url-card-title text-muted">QR Code<br><img src="data:$!{url.photo.type};base64,$!{url.photo.photo64Base}" width="100" height="100"></div>
+                                    </div>
+                                    <div class="card-footer text-end">
+                                        <a class="btn btn-sm btn-primary" href="urlInfo/$!{url.id}">Info</a>
+                                        <a class="btn btn-sm btn-danger" href="urlDelete/$!{url.id}">Delete</a>
+                                    </div>
+                                </div>
+                                #end <!-- end foreach -->
+                            </div>
+                            <!-- paginator -->
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    #foreach($page in $pages)
+                                    #if($page == 1)
+                                    #set($previousPage = $currentPage - 1)
+                                    <li class="page-item">
+                                        #if($!{currentPage} == 1)
+                                        <a class="page-link"  href="/user/users?pag=$currentPage">Previous</a>
+                                        #else
+                                        <a class="page-link"  href="/user/users?pag=$previousPage">Previous</a>
+                                        #end
+                                    </li>
+                                    #end
+
+                                    #if($page == $currentPage)
+                                    <li class="page-item active"><a class="page-link" href="#">$page</a></li>
+                                    #end
+                                    #if($page != $currentPage && $page != -1)
+                                    <li class="page-item "><a class="page-link" href="/user/users?pag=$page">$page</a></li>
+                                    #end
+                                    #if($page == -1)
+                                    <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                                    #end
+
+                                    #if($page == $totalPages)
+                                    #set($nextPage = $currentPage + 1)
+                                    <li class="page-item">
+                                        #if($currentPage == $totalPages)
+                                        <a class="page-link" href="/user/users?pag=$currentPage">Next</a>
+                                        #else
+                                        <a class="page-link" href="/user/users?pag=$nextPage">Next</a>
+                                        #end
+                                    </li>
+                                    #end
+                                    #end <!-- foreach end -->
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </section>
 </aside>
 
-
-
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 </html>

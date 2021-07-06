@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="../css/fonts.css">
     <link rel="stylesheet" type="text/css" href="../css/listUser.css">
     <meta charset="UTF-8">
-    <title>List of User</title>
+    <title>List of Urls</title>
 </head>
 <body>
 <header>
@@ -46,38 +46,32 @@
     </nav>
 </header>
 <aside>
-    <div class="container-fluid table-top-margin">
+    <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md">
-                <div class="float-start">
-                    <h4 class="title">User List</h4>
+            <div class="col-md card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title titleFont text-muted">Urls</h5>
+                    #foreach($url in $urls)
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <p class="url-card-title text-muted col-md-9">Original Link<br><a class="url-font" href="$!{url.originalUrl}">$url.originalUrl</a></p>
+                                <p class="col-md url-font text-muted text-end">$url.visits.size()</p>
+                            </div>
+                            <div class="row">
+                                <p class="url-card-title text-muted">Shortened url<br><a class="url-font" href="$!{$url.cuttedUrl}">$url.cuttedUrl</a></p>
+                            </div>
+                            <div class="url-card-title text-muted">QR Code<br><img src="data:$!{url.photo.type};base64,$!{url.photo.photo64Base}" width="100" height="100"></div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <a class="btn btn-sm btn-primary" href="urlInfo/$!{url.id}">Info</a>
+                            <a class="btn btn-sm btn-danger" href="urlDelete/$!{url.id}">Delete</a>
+                        </div>
+                    </div>
+                    #end <!-- end foreach -->
                 </div>
-                <table class="table table-dark table-striped table-hover table-borderless text-center">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    #foreach($user in $users)
-                    #if($userLoggedId != $user.id)
-                    <tr>
-                        <th scope="row">$user.id</th>
-                        <td>$user.userName</td>
-                        <td>$user.rol</td>
-                        <td>
-                            <a class="btn btn-warning btn-sm" href="/user/edit/$!{user.id}">Edit</a>
-                            <a class="btn btn-danger btn-sm" href="/user/delete/$!{user.id}">Delete</a>
-                        </td>
-                    </tr>
-                    #end
-                    #end
-                    </tbody>
-                </table>
+                <!-- paginator -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         #foreach($page in $pages)

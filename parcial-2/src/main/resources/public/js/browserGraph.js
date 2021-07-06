@@ -1,17 +1,17 @@
 google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawBasic);
+google.charts.setOnLoadCallback(drawBrowser);
 
-function drawBasic() {
+function drawBrowser() {
 
     var data = new google.visualization.arrayToDataTable([
-        ['Date', 'Total Clicks'],
-        ['Past yesterday', 48],
-        ['Yesterday', 30],
-        ['Today', 10]
+        ['Browser', 'Total Clicks'],
+        ['Firefox', 48],
+        ['Chrome', 30],
+        ['Safari', 10],
     ]);
     var options = {
         hAxis: {
-            title: 'Day',
+            title: 'Browser',
         },
         vAxis: {
             title: 'Total Clicks'
@@ -19,9 +19,9 @@ function drawBasic() {
     };
 
     var chart = new google.visualization.ColumnChart(
-        document.getElementById('chart_div'));
+        document.getElementById('browser_graph'));
 
     chart.draw(data, options);
 }
 
-window.onresize = drawBasic;
+window.onresize = drawBrowser;
