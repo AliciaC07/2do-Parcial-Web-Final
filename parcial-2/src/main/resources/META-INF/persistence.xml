@@ -9,6 +9,7 @@
         <class>org.parcial.models.CookieVerification</class>
         <class>org.parcial.models.Visit</class>
         <class>org.parcial.models.Url</class>
+        <class>org.parcial.models.dto.VisitsDateDto</class>
 
         <properties>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test" />-->

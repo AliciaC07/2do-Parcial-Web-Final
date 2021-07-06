@@ -41,6 +41,9 @@ dependencies {
     compile "eu.bitwalker:UserAgentUtils:1.21"
     compile "org.apache.velocity:velocity-engine-core:2.2"
     implementation 'com.github.seancfoley:ipaddress:5.3.3'
+    compile "org.modelmapper:modelmapper:2.4.2"
+
+
 }
 shadowJar{
     archivesBaseName = 'app'

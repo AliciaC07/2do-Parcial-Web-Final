@@ -8,7 +8,9 @@ import org.parcial.models.User;
 import org.parcial.models.Visit;
 import org.parcial.services.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,10 @@ public class ShortenerController {
             app.get("/shorty/:cut", ctx -> {
                 Map<String, Object> model = new HashMap<>();
                 Url url  = urlService.findUrlByHash(ctx.pathParam("cut"));
+                if (url == null){
+                    ctx.redirect("/shortener/shorty");
+                    return;
+                }
                 User userLogged = new User();
                 if ( ctx.cookie("userToken") != null){
 
@@ -167,7 +173,8 @@ public class ShortenerController {
                         visit.setOperatingSystem(userAgentP.getOperatingSystem().getName());
                         visit.setIp(ctx.ip());
                         System.out.println(ctx.ip());
-                        visit.setDateTime(LocalDateTime.now());
+                        visit.setDate(LocalDate.now());
+                        visit.setTime(LocalTime.now());
                         visitService.create(visit);
 
                         ctx.redirect("https://"+url.getOriginalUrl());

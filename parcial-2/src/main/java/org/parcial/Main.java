@@ -8,8 +8,10 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.config.UrlEncodeShort;
 import org.parcial.controllers.ShortenerController;
 import org.parcial.controllers.UserController;
+import org.parcial.controllers.VisitController;
 import org.parcial.models.User;
 import org.parcial.services.UserService;
+import org.parcial.services.VisitService;
 
 public class Main {
     public static void main(String[] args){
@@ -22,10 +24,11 @@ public class Main {
         org.practica.services.BootStrapService.startDb();
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
         app.get("/",ctx -> {
-            ctx.redirect("shortener");
+            ctx.redirect("shortener/shorty");
         });
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
+        new VisitController(app).applyRoutes();
         StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
         User user = new User(null, "alicruz0703@gmail.com", spe.encryptPassword("123"), "Admin");
         UserService.getInstance().create(user);
@@ -43,6 +46,7 @@ public class Main {
         UserService.getInstance().create(otro5);
         User otro6 = new User(null, "12379@gmail.com", spe.encryptPassword("123"),"User");
         UserService.getInstance().create(otro6);
+
 
 
     }
