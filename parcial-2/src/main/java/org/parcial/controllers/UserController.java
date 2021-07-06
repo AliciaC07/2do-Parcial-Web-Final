@@ -8,6 +8,7 @@ import org.parcial.services.CookieVerificationService;
 import org.parcial.services.Principal;
 import org.parcial.services.UserService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,33 @@ public class UserController {
             app.get("/user/users", ctx -> {
                     Map<String, Object> model = new HashMap<>();
                     User userLogged = null;
+                Integer currentPage = 1;
+                Integer pageIndex = 0;
+                if (ctx.queryParam("pag") != null){
+                    pageIndex = ctx.queryParam("pag",Integer.class).get();
+                }else {
+                    pageIndex = currentPage;
+                }
+                Integer pageSize = 4;
+                Integer total = (userService.findAllUsersByActive().size()+(pageSize-1))/pageSize;
+                System.out.println(total);
+                ArrayList<Integer> pages = new ArrayList<>();
+                for (int i =0; i < total; i++){
+                    pages.add(i+1);
+                }
+                if (ctx.queryParam("pag") != null){
+                    double div = Math.ceil((pageIndex.doubleValue()-1)/pageSize.doubleValue());
+                    currentPage = Double.valueOf(div).intValue()+1;
+                    if (currentPage < ctx.queryParam("pag",Integer.class).get()){
+                        currentPage = ctx.queryParam("pag",Integer.class).get();
+                    }
+                }else {
+                    currentPage = 1;
+                }
+                model.put("currentPage",currentPage);
+                model.put("pages", pages);
+                model.put("totalPages", total);
+
                     if ( ctx.cookie("userToken") != null){
 
                         Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
@@ -76,7 +104,7 @@ public class UserController {
                         return;
                     }
 
-                     model.put("users", userService.findAllUsersByActive());
+                     model.put("users", userService.findAllByActiveTruePagination(pageSize, currentPage));
                      model.put("userLoggedId", userLogged.getId());
                      model.put("userRole", userLogged.getRol());
 
