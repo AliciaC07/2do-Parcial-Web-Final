@@ -8,35 +8,37 @@
     <title>Dashboard</title>
 </head>
 <body>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="../js/Chart.js"></script>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Url shortener</a>
+            <a class="navbar-brand" href="/shortener">Url shortener</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse  navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/shortener">Home</a>
                     </li>
-                    <!--#if($logged == false)-->
+                    #if($logged == false)
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign up</a>
+                        <a class="nav-link" href="/user/register">Sign up</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Log in</a>
+                        <a class="nav-link" href="/user/login">Log in</a>
                     </li>
-                    <!--#else-->
+                    #else
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Options
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Log out</a></li>
+                            <li><a class="dropdown-item" href="/user/logout">Log out</a></li>
                         </ul>
                     </li>
-                    <!--#end-->
+                    #end
                 </ul>
             </div>
         </div>
@@ -44,36 +46,77 @@
 </header>
 <aside>
     <section>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="container-fluid col-md mt-3">
-                <div class="card mx-auto">
-                    <div class="card-body row">
-                        <div class="my-2 mx-auto card text-start col-md-3 number-url-card border-0">
-                            <div class="container-fluid mr-1 my-1">
-                                <h3 class="titleFont text-muted">All Url</h3>
-                                <strong>0</strong>
+        <div class="container-fluid">
+            <div class="card mx-auto mt-3 border-0">
+                <div class="card-body">
+            <!-- La vaina que sale arriba xD -->
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="card col-md">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="my-2 mx-auto card text-start col-md-3 number-url-card border-0">
+                                        <div class="container-fluid mr-1 my-1">
+                                            <h3 class="titleFont text-muted">All Url</h3>
+                                            <strong>0</strong>
+                                        </div>
+                                    </div>
+                                    <div class="my-2 mx-auto card text-start col-md-3 total-clicks-card border-0">
+                                        <div class="container-fluid mr-1 my-1">
+                                            <h3 class="titleFont text-muted">Total Clicks</h3>
+                                            <strong>0</strong>
+                                        </div>
+                                    </div>
+                                    <div class="my-2 mx-auto card text-start col-md-3 added-this-month-card border-0">
+                                        <div class="container-fluid mr-1 my-1">
+                                            <h3 class="titleFont text-muted">Links added this month</h3>
+                                            <strong>0</strong>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="my-2 mx-auto card text-start col-md-3 total-clicks-card border-0">
-                            <div class="container-fluid mr-1 my-1">
-                                <h3 class="titleFont text-muted">Total Clicks</h3>
-                                <strong>0</strong>
-                            </div>
-                        </div>
-                        <div class="my-2 mx-auto card text-start col-md-3 added-this-month-card border-0">
-                            <div class="container-fluid mr-1 my-1">
-                                <h3 class="titleFont text-muted">Links added this month</h3>
-                                <strong>0</strong>
-                            </div>
-                        </div>
+                        <div class="col-md-2"></div>
                     </div>
+                    <!-- El grafico de google -->
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="card col-md mt-3">
+                            <div class="card-body">
+                                <h5 class="card-title titleFont text-muted">Total clicks in the last 3 days</h5>
+                                <div class="text-center"><div class="col-md" id="chart_div"></div></div>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+            <!-- Url shortener del landing page -->
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="card col-md mt-3 mx-auto my-auto  p-3 bg-body rounded">
+                            #if($cuttedUrl == "")
+                            <form method="post" action="/shortener/register/reg-url">
+                                <div class=" input-group input-group-lg ">
+                                    <input type="text" name="originalUrl" id="url" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-primary" type="submit" id="button-addon2">Shorten</button>
+                                </div>
+                            </form>
+                            #else
+                            <div class=" input-group input-group-lg ">
+                                <input type="text" name="cuttedUrl" id="urlCutted" value="$urlCut" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <a class="btn btn-outline-primary" type="button" href="/$hashUrl" id="button-addon3">Go</a>
+                            </div>
+                            #end
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+            <!-- Tabla con los urls -->
                 </div>
             </div>
-            <div class="col-md-2"></div>
         </div>
     </section>
 </aside>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
