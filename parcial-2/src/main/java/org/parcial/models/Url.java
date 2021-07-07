@@ -27,7 +27,7 @@ public class Url implements Serializable {
     @Column
     private Boolean active = true;
 
-    @Column(length = 1000)
+    @Column(length = 1500)
     private String qrCode;
 
     @Column

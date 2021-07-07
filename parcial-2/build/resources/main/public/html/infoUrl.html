@@ -76,8 +76,8 @@
                       </button>
                     </p>
                     <div id="collapse$!{url.id}" class="accordion-collapse collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        <img src="data:$!{url.photo.type};base64,$!{url.photo.photo64Base}" width="150" height="150">
+                      <div class="accordion-body text-center">
+                        <img src="data:png;base64,$!{url.qrCode}" width="200" height="200">
                       </div>
                     </div>
                   </div>
@@ -99,7 +99,7 @@
         <div class="card col-md mt-3">
           <div class="card-body">
             <h5 class="card-title titleFont text-muted">Total clicks per Operating Systems</h5>
-            <div class="text-center"><div class="col-md" id="OS_graph"></div></div>
+            <div class="text-center"><div class="col-md" id="OS_graph" data-graph='$osGraph'></div></div>
           </div>
         </div>
         <div class="col-md-2"></div>
@@ -110,7 +110,7 @@
         <div class="card col-md mt-3 mb-3">
           <div class="card-body">
             <h5 class="card-title titleFont text-muted">Total clicks per Browser</h5>
-            <div class="text-center"><div class="col-md" id="browser_graph"></div></div>
+            <div class="text-center"><div class="col-md" id="browser_graph" data-graph='$browserGraph'></div></div>
           </div>
         </div>
         <div class="col-md-2"></div>
