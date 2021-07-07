@@ -1,14 +1,12 @@
 package org.parcial.controllers;
 
+import com.google.gson.Gson;
 import io.javalin.Javalin;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.models.CookieVerification;
 import org.parcial.models.Url;
 import org.parcial.models.User;
-import org.parcial.services.CookieVerificationService;
-import org.parcial.services.Principal;
-import org.parcial.services.UrlService;
-import org.parcial.services.UserService;
+import org.parcial.services.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +20,7 @@ public class UserController {
     private final Javalin app;
     Principal principal = Principal.getInstance();
     private UserService userService = UserService.getInstance();
+    private VisitService visitService = VisitService.getInstance();
     private CookieVerificationService cookieVerificationService = CookieVerificationService.getInstance();
 
     public UserController(Javalin app) {
@@ -103,7 +102,7 @@ public class UserController {
                 }else {
                     currentPage = 1;
                 }
-                model.put("userRole", userLogged.getRol());
+                model.put("userLogged", userLogged);
                 model.put("currentPage",currentPage);
                 model.put("pages", pages);
                 model.put("totalPages", total);
@@ -155,10 +154,12 @@ public class UserController {
                     ctx.redirect("/user/login");
                     return;
                 }
-                model.put("userRole", userLogged.getRol());
+                model.put("userLogged", userLogged);
                 Integer id = ctx.pathParam("id", Integer.class).get();
                 Url url = UrlService.getInstance().find(id);
                 model.put("url", url);
+                model.put("osGraph", new Gson().toJson(visitService.getQuantityByOperatingSystem()));
+                model.put("browserGraph", new Gson().toJson(visitService.getQuantityByBrowser()));
                 ctx.render("public/html/infoUrl.html", model);
             });
 
@@ -225,8 +226,8 @@ public class UserController {
                     }
 
                      model.put("users", userService.findAllByActiveTruePagination(pageSize, currentPage));
-                     model.put("userLoggedId", userLogged.getId());
-                     model.put("userRole", userLogged.getRol());
+                     model.put("userLogged", userLogged);
+
 
                     ctx.render("/public/html/listUser.html", model);
                 });
@@ -260,6 +261,10 @@ public class UserController {
                         ctx.sessionAttribute("user", userLog);
 
 
+                    }
+                    List<Url> urlsSotore = ctx.sessionAttribute("urlsS");
+                    if (urlsSotore != null){
+                        UrlService.getInstance().changeUrlCreator(userLog, urlsSotore);
                     }
                     //Haccer redirect
                     ctx.redirect("/user/dashboard");

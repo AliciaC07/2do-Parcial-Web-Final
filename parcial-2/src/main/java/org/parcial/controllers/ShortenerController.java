@@ -108,10 +108,10 @@ public class ShortenerController {
                     model.put("logged", true);
                     userLogged = ctx.sessionAttribute("user");
                     userLogged = userService.findByUserName(userLogged.getUserName());
-                    model.put("userRole", userLogged.getRol());
+                    model.put("userLogged", userLogged);
                 }else {
                     model.put("logged", false);
-                    model.put("userRole", "");
+                    model.put("userLogged", "");
                 }
                 ctx.render("/public/html/landing.html", model);
 
@@ -143,7 +143,7 @@ public class ShortenerController {
                         url.setUser(user);
                         url.setDateAdded(LocalDate.now());
                         urlService.create(url);
-                        byte [] qrcode = principal.getQRCodeImage("https://"+domain+"/url/info/"+url.getId(),100,100);
+                        byte [] qrcode = principal.getQRCodeImage("https://"+domain+"/url/info/"+url.getId(),500,500);
                         url.setQrCode(principal.getQrImageBase64(qrcode));
                         urlService.edit(url);
                     }else {

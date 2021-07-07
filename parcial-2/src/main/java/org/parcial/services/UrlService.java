@@ -12,6 +12,7 @@ import java.util.List;
 
 public class UrlService extends Repository<Url> {
     private static  UrlService urlService;
+    private String domain = "https://localhost:7000/url/info/";
 
     public UrlService() {
         super(Url.class);
@@ -65,7 +66,7 @@ public class UrlService extends Repository<Url> {
     public void changeUrlCreator(User creator, List<Url> urls) throws IOException, WriterException {
         for (Url url : urls) {
             url.setUser(creator);
-            byte [] qrcode = Principal.getInstance().getQRCodeImage("https://localhost:7000/url/info/"+url.getId(),100,100);
+            byte [] qrcode = Principal.getInstance().getQRCodeImage(domain +url.getId(),500,500);
             url.setQrCode(Principal.getInstance().getQrImageBase64(qrcode));
             urlService.edit(url);
         }
