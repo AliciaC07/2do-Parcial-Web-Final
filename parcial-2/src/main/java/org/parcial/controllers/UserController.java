@@ -3,9 +3,11 @@ package org.parcial.controllers;
 import io.javalin.Javalin;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.models.CookieVerification;
+import org.parcial.models.Url;
 import org.parcial.models.User;
 import org.parcial.services.CookieVerificationService;
 import org.parcial.services.Principal;
+import org.parcial.services.UrlService;
 import org.parcial.services.UserService;
 
 import java.util.ArrayList;
@@ -41,10 +43,128 @@ public class UserController {
                     model.put("logged", false);
                     ctx.render("/public/html/login.html",model);
                 });
+            app.get("/user/all-urls", ctx -> {
+               Map<String, Object> model = new HashMap<>();
+               User userLogged = null;
+                if ( ctx.cookie("userToken") != null){
+
+                    Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                    if (cookie.get("user") == null){
+                        model.put("logged", false);
+                        ctx.redirect("/user/login");
+                        return;
+                    }else {
+                        if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                            model.put("logged", true);
+                            userLogged = userService.findByUserName(cookie.get("user"));
+                            if (!userLogged.getRol().equalsIgnoreCase("Admin")){
+                                ctx.redirect("/shortener");
+                                return;
+                            }
+                        }else{
+                            model.put("logged", false);
+                            ctx.redirect("/user/login");
+                            return;
+                        }
+                    }
+
+                }else if (ctx.sessionAttribute("user") != null){
+                    model.put("logged", true);
+                    userLogged = ctx.sessionAttribute("user");
+                    userLogged = userService.findByUserName(userLogged.getUserName());
+                    if (!userLogged.getRol().equalsIgnoreCase("Admin")){
+                        ctx.redirect("/shortener");
+                        return;
+                    }
+                }else {
+                    model.put("logged", false);
+                    ctx.redirect("/user/login");
+                    return;
+                }
+                Integer currentPage = 1;
+                Integer pageIndex = 0;
+                if (ctx.queryParam("pag") != null){
+                    pageIndex = ctx.queryParam("pag",Integer.class).get();
+                }else {
+                    pageIndex = currentPage;
+                }
+                Integer pageSize = 4;
+                Integer total = (UrlService.getInstance().findAllUrlsByActive().size()+(pageSize-1))/pageSize;
+                ArrayList<Integer> pages = new ArrayList<>();
+                for (int i =0; i < total; i++){
+                    pages.add(i+1);
+                }
+                if (ctx.queryParam("pag") != null){
+                    double div = Math.ceil((pageIndex.doubleValue()-1)/pageSize.doubleValue());
+                    currentPage = Double.valueOf(div).intValue()+1;
+                    if (currentPage < ctx.queryParam("pag",Integer.class).get()){
+                        currentPage = ctx.queryParam("pag",Integer.class).get();
+                    }
+                }else {
+                    currentPage = 1;
+                }
+                model.put("userRole", userLogged.getRol());
+                model.put("currentPage",currentPage);
+                model.put("pages", pages);
+                model.put("totalPages", total);
+                model.put("urls", UrlService.getInstance().findAllByActiveTruePagination(pageSize, currentPage));
+                ctx.render("public/html/listUrl.html", model);
+            });
+            app.get("/url/delete/:id", ctx -> {
+                Integer id = ctx.pathParam("id", Integer.class).get();
+                Url url = UrlService.getInstance().find(id);
+                if (url != null){
+                    url.setActive(false);
+                    UrlService.getInstance().edit(url);
+                }else {
+                    ctx.redirect("/user/all-urls");
+                }
+                ctx.redirect("/user/all-urls");
+            });
+            app.get("/url/info/:id", ctx -> {
+                Map<String, Object> model = new HashMap<>();
+                User userLogged = null;
+                if ( ctx.cookie("userToken") != null){
+
+                    Map<String, String> cookie  = cookieVerificationService.findByCookieToken(ctx.cookie("userToken"));
+                    if (cookie.get("user") == null){
+                        model.put("logged", false);
+                        ctx.redirect("/user/login");
+                        return;
+                    }else {
+                        if (principal.tokenVerify(cookie.get("user"), (cookie.get("token")))){
+                            model.put("logged", true);
+                            userLogged = userService.findByUserName(cookie.get("user"));
+                            if (!userLogged.getRol().equalsIgnoreCase("Admin")){
+                                ctx.redirect("/shortener");
+                                return;
+                            }
+                        }else{
+                            model.put("logged", false);
+                            ctx.redirect("/user/login");
+                            return;
+                        }
+                    }
+
+                }else if (ctx.sessionAttribute("user") != null){
+                    model.put("logged", true);
+                    userLogged = ctx.sessionAttribute("user");
+                    userLogged = userService.findByUserName(userLogged.getUserName());
+                }else {
+                    model.put("logged", false);
+                    ctx.redirect("/user/login");
+                    return;
+                }
+                model.put("userRole", userLogged.getRol());
+                Integer id = ctx.pathParam("id", Integer.class).get();
+                Url url = UrlService.getInstance().find(id);
+                model.put("url", url);
+                ctx.render("public/html/infoUrl.html", model);
+            });
 
             app.get("/user/users", ctx -> {
-                    Map<String, Object> model = new HashMap<>();
-                    User userLogged = null;
+                Map<String, Object> model = new HashMap<>();
+                User userLogged = null;
                 Integer currentPage = 1;
                 Integer pageIndex = 0;
                 if (ctx.queryParam("pag") != null){
@@ -142,7 +262,7 @@ public class UserController {
 
                     }
                     //Haccer redirect
-                    ctx.redirect("/shortener");
+                    ctx.redirect("/user/dashboard");
 
                 });
             app.get("/user/register", ctx -> {
@@ -175,8 +295,12 @@ public class UserController {
                     }else {
                         userService.create(newUser);
                     }
-                    ///hacer redirect al login para que se loguee ya que fue creado el usuario
-                    ctx.result("Dique funciono");
+                    List<Url> urlsSotore = ctx.sessionAttribute("urlsS");
+                    if (urlsSotore != null){
+                        UrlService.getInstance().changeUrlCreator(newUser, urlsSotore);
+                    }
+
+
                     ctx.redirect("/user/login");
 
                 });

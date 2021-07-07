@@ -25,6 +25,7 @@ public class ShortenerController {
     private UrlService urlService = UrlService.getInstance();
     private VisitService visitService = VisitService.getInstance();
     private CookieVerificationService cookieVerificationService = CookieVerificationService.getInstance();
+    private String domain = "localhost:7000/";
 
     public ShortenerController(Javalin app) {
         this.app = app;
@@ -69,7 +70,7 @@ public class ShortenerController {
 
                 model.put("cuttedUrl", url.getCuttedUrl());
                 model.put("hashUrl", url.getCuttedUrl());
-                model.put("urlCut", "localhost:7000/"+url.getCuttedUrl());
+                model.put("urlCut", domain+url.getCuttedUrl());
                 ctx.render("/public/html/landing.html", model);
 
 
@@ -112,7 +113,7 @@ public class ShortenerController {
                     model.put("logged", false);
                     model.put("userRole", "");
                 }
-                    ctx.render("/public/html/landing.html", model);
+                ctx.render("/public/html/landing.html", model);
 
 
                 });
@@ -124,8 +125,7 @@ public class ShortenerController {
                     String shortened = urlEncodeShort.encodeUrl(originalUrl);
                     url.setOriginalUrl(urlEncodeShort.decodeUrl(shortened));
                     url.setCuttedUrl(shortened);
-                    System.out.println(url.getOriginalUrl());
-                    System.out.println(url.getCuttedUrl());
+
                     User user = null;
                     if ( ctx.cookie("userToken") != null){
 
@@ -141,20 +141,31 @@ public class ShortenerController {
                     }
                     if (user != null){
                         url.setUser(user);
+                        url.setDateAdded(LocalDate.now());
                         urlService.create(url);
+                        byte [] qrcode = principal.getQRCodeImage("https://"+domain+"/url/info/"+url.getId(),100,100);
+                        url.setQrCode(principal.getQrImageBase64(qrcode));
+                        urlService.edit(url);
                     }else {
                         List<Url> urls = new ArrayList<>();
                         if (ctx.sessionAttribute("urlsS") != null){
                             urls = ctx.sessionAttribute("urlsS");
                         }
+                        url.setDateAdded(LocalDate.now());
                         urlService.create(url);
                         urls.add(url);
                         ctx.sessionAttribute("urlsS", urls);
 
 
                     }
-                    ////hacer redirect a la pagina
-                    ctx.redirect("/shorty/"+url.getCuttedUrl());
+                    if (user != null){
+
+                        ctx.redirect("/user/dashboard");
+
+                    }else {
+                        ctx.redirect("/shorty/"+url.getCuttedUrl());
+
+                    }
 
                 });
 

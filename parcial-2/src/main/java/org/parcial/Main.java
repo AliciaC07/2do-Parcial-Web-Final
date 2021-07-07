@@ -1,5 +1,6 @@
 package org.parcial;
 
+import com.google.zxing.WriterException;
 import io.javalin.Javalin;
 import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.rendering.JavalinRenderer;
@@ -10,11 +11,14 @@ import org.parcial.controllers.ShortenerController;
 import org.parcial.controllers.UserController;
 import org.parcial.controllers.VisitController;
 import org.parcial.models.User;
+import org.parcial.services.Principal;
 import org.parcial.services.UserService;
 import org.parcial.services.VisitService;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException, WriterException {
         Javalin app = Javalin.create(config -> {
             config.registerPlugin(new RouteOverviewPlugin("/public"));
             config.addStaticFiles("/public");
@@ -23,9 +27,6 @@ public class Main {
         }).start(7000);
         org.practica.services.BootStrapService.startDb();
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
-        app.get("/",ctx -> {
-            ctx.redirect("shortener/shorty");
-        });
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
         new VisitController(app).applyRoutes();
@@ -46,6 +47,9 @@ public class Main {
         UserService.getInstance().create(otro5);
         User otro6 = new User(null, "12379@gmail.com", spe.encryptPassword("123"),"User");
         UserService.getInstance().create(otro6);
+        System.out.println(Principal.getInstance()
+                .getQrImageBase64(Principal.getInstance()
+                        .getQRCodeImage("https://www.programmersought.com/article/6822542245/",300, 300)));
 
 
 

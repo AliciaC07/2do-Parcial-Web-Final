@@ -46,4 +46,6 @@ public class Visit implements Serializable {
         this.browser = browser;
         this.urlVisit = urlVisit;
     }
+
+
 }

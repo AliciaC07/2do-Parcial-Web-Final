@@ -1,6 +1,7 @@
 package org.parcial.services;
 
 import org.parcial.models.Visit;
+import org.parcial.models.dto.VisitsDateDto;
 import org.parcial.repository.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,8 +22,9 @@ public class VisitService extends Repository<Visit> {
         }
         return visitService;
     }
-    public List<Object> getAllQuantityByDate(){
-        List<Object> visitsQuantity = new ArrayList<>();
+    public List<VisitsDateDto> getAllQuantityByDate(){
+        List<Object[]> visit = new ArrayList<>();
+        List<VisitsDateDto> visitsQuantity = new ArrayList<>();
         EntityManager entityManager = getEntityManager();
         Query query = entityManager.createQuery("select date, count(id) as quantity " +
                 "from Visit WHERE date >= :today" +
@@ -31,7 +33,14 @@ public class VisitService extends Repository<Visit> {
         query.setParameter("today",LocalDate.now());
         query.setParameter("yesterday", LocalDate.now().minusDays(1));
         query.setParameter("pyesterday",LocalDate.now().minusDays(2));
-        visitsQuantity = query.getResultList();
+        visit = query.getResultList();
+        for (Object[] obj: visit) {
+            VisitsDateDto vso = new VisitsDateDto();
+            vso.setDate(LocalDate.parse(obj[0].toString()));
+            vso.setQuantity(Integer.parseInt(obj[1].toString()));
+            visitsQuantity.add(vso);
+        }
+
         return visitsQuantity;
 
 

@@ -34,7 +34,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             #if($userRole == "Admin")
-                            <li><a class="dropdown-item" href="#">User List</a></li>
+                            <li><a class="dropdown-item" href="/user/users">User List</a></li>
+                            <li><a class="dropdown-item" href="/user/all-urls">Url List</a></li>
                             #end
                             <li><a class="dropdown-item" href="/user/logout">Log out</a></li>
                         </ul>
@@ -56,17 +57,17 @@
                     <div class="card mt-3">
                         <div class="card-body">
                             <div class="row">
-                                <p class="url-card-title text-muted col-md-9">Original Link<br><a class="url-font" href="$!{url.originalUrl}">$url.originalUrl</a></p>
+                                <p class="url-card-title text-muted col-md-9">Original Link<br><a class="url-font" >$url.originalUrl</a></p>
                                 <p class="col-md url-font text-muted text-end">$url.visits.size()</p>
                             </div>
                             <div class="row">
-                                <p class="url-card-title text-muted">Shortened url<br><a class="url-font" href="$!{$url.cuttedUrl}">$url.cuttedUrl</a></p>
+                                <p class="url-card-title text-muted">Shortened url<br><a class="url-font" >localhost:7000/$url.cuttedUrl</a></p>
                             </div>
                             <div class="url-card-title text-muted">QR Code<br><img src="data:$!{url.photo.type};base64,$!{url.photo.photo64Base}" width="100" height="100"></div>
                         </div>
                         <div class="card-footer text-end">
-                            <a class="btn btn-sm btn-primary" href="urlInfo/$!{url.id}">Info</a>
-                            <a class="btn btn-sm btn-danger" href="urlDelete/$!{url.id}">Delete</a>
+                            <a class="btn btn-sm btn-primary" href="/url/info/$!{url.id}">Info</a>
+                            <a class="btn btn-sm btn-danger" href="/url/delete/$!{url.id}">Delete</a>
                         </div>
                     </div>
                     #end <!-- end foreach -->
@@ -79,9 +80,9 @@
                         #set($previousPage = $currentPage - 1)
                         <li class="page-item">
                             #if($!{currentPage} == 1)
-                            <a class="page-link"  href="/user/users?pag=$currentPage">Previous</a>
+                            <a class="page-link"  href="/user/all-urls?pag=$currentPage">Previous</a>
                             #else
-                            <a class="page-link"  href="/user/users?pag=$previousPage">Previous</a>
+                            <a class="page-link"  href="/user/all-urls?pag=$previousPage">Previous</a>
                             #end
                         </li>
                         #end
@@ -90,7 +91,7 @@
                         <li class="page-item active"><a class="page-link" href="#">$page</a></li>
                         #end
                         #if($page != $currentPage && $page != -1)
-                        <li class="page-item "><a class="page-link" href="/user/users?pag=$page">$page</a></li>
+                        <li class="page-item "><a class="page-link" href="/user/all-urls?pag=$page">$page</a></li>
                         #end
                         #if($page == -1)
                         <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
@@ -100,9 +101,9 @@
                         #set($nextPage = $currentPage + 1)
                         <li class="page-item">
                             #if($currentPage == $totalPages)
-                            <a class="page-link" href="/user/users?pag=$currentPage">Next</a>
+                            <a class="page-link" href="/user/all-urls?pag=$currentPage">Next</a>
                             #else
-                            <a class="page-link" href="/user/users?pag=$nextPage">Next</a>
+                            <a class="page-link" href="/user/all-urls?pag=$nextPage">Next</a>
                             #end
                         </li>
                         #end

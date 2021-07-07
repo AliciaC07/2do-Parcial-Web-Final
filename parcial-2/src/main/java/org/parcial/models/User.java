@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class User implements Serializable {
     @Column
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     List<Url> urls = new ArrayList<>();
 
     public User() {
@@ -36,5 +37,23 @@ public class User implements Serializable {
         this.userName = userName;
         this.password = password;
         this.rol = rol;
+    }
+    public Integer getTotalCliks(){
+        Integer count = 0;
+        for (Url v : urls) {
+            count += v.getVisits().size();
+        }
+        return count;
+
+    }
+    public  Integer getQuantityPerMonth(){
+        Integer count = 0;
+        for (Url u : urls) {
+            if (u.getDateAdded().getMonth() == LocalDate.now().getMonth()){
+                count++;
+            }
+        }
+        return count;
+
     }
 }
