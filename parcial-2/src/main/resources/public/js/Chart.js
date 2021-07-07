@@ -10,7 +10,7 @@ console.log(info);
 function drawBasic() {
 
     let arrayData=[];
-    if(info.length > 1){
+    if(info.length > 0){
         for(let i=0; i < info.length+1; i ++){
             if(i === 0){
                 arrayData[i] = ['Date', 'Total Clicks']

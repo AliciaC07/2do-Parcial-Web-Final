@@ -261,6 +261,10 @@ public class UserController {
 
 
                     }
+                    List<Url> urlsSotore = ctx.sessionAttribute("urlsS");
+                    if (urlsSotore != null){
+                        UrlService.getInstance().changeUrlCreator(userLog, urlsSotore);
+                    }
                     //Haccer redirect
                     ctx.redirect("/user/dashboard");
 
