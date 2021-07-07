@@ -155,7 +155,7 @@ public class UserController {
                     ctx.redirect("/user/login");
                     return;
                 }
-                model.put("userRole", userLogged.getRol());
+                model.put("userLogged", userLogged);
                 Integer id = ctx.pathParam("id", Integer.class).get();
                 Url url = UrlService.getInstance().find(id);
                 model.put("url", url);

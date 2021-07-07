@@ -10,13 +10,14 @@ console.log(info);
 function drawBasic() {
 
     let arrayData=[];
-    for(let i=0; i < info.length+1; i ++){
-        if(i === 0){
-            arrayData[i] = ['Date', 'Total Clicks']
-        }else
-            arrayData[i] = [info[i-1].date,info[i-1].quantity]
+    if(info.length > 1){
+        for(let i=0; i < info.length+1; i ++){
+            if(i === 0){
+                arrayData[i] = ['Date', 'Total Clicks']
+            }else
+                arrayData[i] = [info[i-1].date,info[i-1].quantity]
+        }
     }
-
     var data = new google.visualization.arrayToDataTable(arrayData);
     var options = {
         hAxis: {
