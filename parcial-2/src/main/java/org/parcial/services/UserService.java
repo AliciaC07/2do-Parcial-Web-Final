@@ -23,7 +23,7 @@ public class UserService  extends Repository<User> {
     }
     public User findByUserName(String username){
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createQuery("select u from app_user u where u.userName = :username");
+        Query query = entityManager.createQuery("select u from app_user u where u.userName = :username and u.active = true ");
         query.setParameter("username", username);
         List<User> user = query.getResultList();
         if (user.isEmpty()){
@@ -31,6 +31,34 @@ public class UserService  extends Repository<User> {
             return null;
         }
         return  user.get(0);
+
+    }
+    public User findById(Integer id){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("select u from app_user u where u.id = :id and u.active = true ");
+        query.setParameter("id", id);
+        List<User> user = query.getResultList();
+        if (user.isEmpty()){
+            System.out.println("Nada");
+            return null;
+        }
+        return  user.get(0);
+
+    }
+    public List<User> findAllUsersByActive(){
+        EntityManager entityManager = getEntityManager();
+        Query query = entityManager.createQuery("SELECT p from app_user p WHERE p.active = true", User.class);
+        List<User> users = query.getResultList();
+        return users;
+
+    }
+    public List<User> findAllByActiveTruePagination(int pageSize, int lastPageNumber){
+        EntityManager entityManager = getEntityManager();
+        Query selectQuery = entityManager.createQuery("select p from app_user p where p.active = true");
+        selectQuery.setFirstResult((lastPageNumber - 1) * pageSize);
+        selectQuery.setMaxResults(pageSize);
+        List<User> lastPage = selectQuery.getResultList();
+        return lastPage;
 
     }
     public User authUser(String userName, String password){

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +24,15 @@ public class Url implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @Column
+    private Boolean active = true;
+
+    @Column(length = 1000)
+    private String qrCode;
+
+    @Column
+    private LocalDate dateAdded;
+
     @OneToMany(mappedBy = "urlVisit", fetch = FetchType.EAGER)
     private Set<Visit> visits = new HashSet<>();
 
@@ -35,4 +45,7 @@ public class Url implements Serializable {
         this.cuttedUrl = cuttedUrl;
         this.user = user;
     }
+
+
+
 }

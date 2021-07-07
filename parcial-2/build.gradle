@@ -1,9 +1,13 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
+
+mainClassName = 'org.parcial.Main'
 
 repositories {
     mavenCentral()
@@ -33,8 +37,25 @@ dependencies {
             // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
             //'org.bouncycastle:bcprov-jdk15on:1.60',
             'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
-}
+    compile 'com.h2database:h2:1.4.200'
+    compile "eu.bitwalker:UserAgentUtils:1.21"
+    compile "org.apache.velocity:velocity-engine-core:2.2"
+    implementation 'com.github.seancfoley:ipaddress:5.3.3'
+    compile "org.modelmapper:modelmapper:2.4.2"
+    compile "com.google.zxing:core:3.4.1"
+    compile 'com.google.zxing:javase:3.4.1'
 
+
+}
+shadowJar{
+    archivesBaseName = 'app'
+    archiveClassifier = ''
+    archiveVersion = ''
+}
+task stage{
+    dependsOn shadowJar
+
+}
 test {
     useJUnitPlatform()
 }

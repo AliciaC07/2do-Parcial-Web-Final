@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -22,7 +24,10 @@ public class Visit implements Serializable {
     private String ip;
 
     @Column
-    private LocalDateTime dateTime;
+    private LocalDate date;
+
+    @Column
+    private LocalTime time;
 
     @Column
     private String browser;
@@ -33,12 +38,14 @@ public class Visit implements Serializable {
     public Visit() {
     }
 
-    public Visit(Integer id, String operatingSystem, String ip, LocalDateTime dateTime, String browser, Url urlVisit) {
-        this.id = id;
+    public Visit(String operatingSystem, String ip, LocalDate date, LocalTime time, String browser, Url urlVisit) {
         this.operatingSystem = operatingSystem;
         this.ip = ip;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
         this.browser = browser;
         this.urlVisit = urlVisit;
     }
+
+
 }
