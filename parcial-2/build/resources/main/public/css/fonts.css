@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Inconsolata";
+    src: local('../Fonts/Inconsolata/static/Inconsolata_Condensed/Inconsolata_Condensed-Bold.ttf'), url("../Fonts/Inconsolata/static/Inconsolata_Condensed/Inconsolata_Condensed-Bold.ttf") format("opentype");
+}
+
+@font-face {
+    font-family: 'Alfa Slab One';
+    src: local('../Fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf'), url("../Fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf") format('truetype');
+}

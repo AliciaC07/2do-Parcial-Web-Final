@@ -108,10 +108,10 @@ public class ShortenerController {
                     model.put("logged", true);
                     userLogged = ctx.sessionAttribute("user");
                     userLogged = userService.findByUserName(userLogged.getUserName());
-                    model.put("userRole", userLogged.getRol());
+                    model.put("userLogged", userLogged);
                 }else {
                     model.put("logged", false);
-                    model.put("userRole", "");
+                    model.put("userLogged", "");
                 }
                 ctx.render("/public/html/landing.html", model);
 

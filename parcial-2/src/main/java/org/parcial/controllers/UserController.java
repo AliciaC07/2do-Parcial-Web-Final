@@ -103,7 +103,7 @@ public class UserController {
                 }else {
                     currentPage = 1;
                 }
-                model.put("userRole", userLogged.getRol());
+                model.put("userLogged", userLogged);
                 model.put("currentPage",currentPage);
                 model.put("pages", pages);
                 model.put("totalPages", total);
@@ -225,8 +225,8 @@ public class UserController {
                     }
 
                      model.put("users", userService.findAllByActiveTruePagination(pageSize, currentPage));
-                     model.put("userLoggedId", userLogged.getId());
-                     model.put("userRole", userLogged.getRol());
+                     model.put("userLogged", userLogged);
+
 
                     ctx.render("/public/html/listUser.html", model);
                 });
