@@ -261,6 +261,9 @@ public class UserController {
                         ctx.sessionAttribute("user", userLog);
 
 
+                    }else {
+                        ctx.redirect("/user/register");
+                        return;
                     }
                     List<Url> urlsSotore = ctx.sessionAttribute("urlsS");
                     if (urlsSotore != null){

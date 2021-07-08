@@ -4,8 +4,8 @@ org/parcial/repository/Repository.java
  org.parcial.repository.Repository
 org/parcial/models/CookieVerification.java
  org.parcial.models.CookieVerification
-org/parcial/Main.java
- org.parcial.Main
+org/parcial/services/UrlService.java
+ org.parcial.services.UrlService
 org/parcial/services/UserService.java
  org.parcial.services.UserService
 org/parcial/services/Principal.java
@@ -32,9 +32,9 @@ org/parcial/config/JwtGen.java
  org.parcial.config.JwtGen
 org/parcial/controllers/ShortenerController.java
  org.parcial.controllers.ShortenerController
-org/parcial/controllers/UserController.java
- org.parcial.controllers.UserController
-org/parcial/services/UrlService.java
- org.parcial.services.UrlService
 org/parcial/controllers/VisitController.java
  org.parcial.controllers.VisitController
+org/parcial/controllers/UserController.java
+ org.parcial.controllers.UserController
+org/parcial/Main.java
+ org.parcial.Main
