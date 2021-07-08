@@ -25,7 +25,7 @@ public class ShortenerController {
     private UrlService urlService = UrlService.getInstance();
     private VisitService visitService = VisitService.getInstance();
     private CookieVerificationService cookieVerificationService = CookieVerificationService.getInstance();
-    private String domain = "localhost:7000/";
+    private String domain = "shortly.traki-tech.games/";
 
     public ShortenerController(Javalin app) {
         this.app = app;

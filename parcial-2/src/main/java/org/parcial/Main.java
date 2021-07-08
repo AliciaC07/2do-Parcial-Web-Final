@@ -21,7 +21,7 @@ public class Main {
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
-        }).start(7000);
+        }).start(7001);
         org.practica.services.BootStrapService.startDb();
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
         new UserController(app).applyRoutes();

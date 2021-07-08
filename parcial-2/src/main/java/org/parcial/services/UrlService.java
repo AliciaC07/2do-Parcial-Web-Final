@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UrlService extends Repository<Url> {
     private static  UrlService urlService;
-    private String domain = "https://localhost:7000/url/info/";
+    private String domain = "https://shortly.traki-tech.games/url/info/";
 
     public UrlService() {
         super(Url.class);

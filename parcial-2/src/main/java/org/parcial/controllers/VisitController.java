@@ -17,7 +17,7 @@ public class VisitController {
     private UserService userService = UserService.getInstance();
     private UrlService urlService = UrlService.getInstance();
     private CookieVerificationService cookieVerificationService = CookieVerificationService.getInstance();
-    private String domain = "localhost:7000/";
+    private String domain = "shortly.traki-tech.games/";
 
 
     public VisitController(Javalin app) {
