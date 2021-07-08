@@ -129,7 +129,7 @@ public class UserController {
                 }else {
                     ctx.redirect("/user/dashboard");
                 }
-                ctx.redirect("/user/all-urls");
+                ctx.redirect("/user/dashboard");
             });
             app.get("/url/info/:id", ctx -> {
                 Map<String, Object> model = new HashMap<>();
