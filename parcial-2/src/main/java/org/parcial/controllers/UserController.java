@@ -127,7 +127,7 @@ public class UserController {
                     url.setActive(false);
                     UrlService.getInstance().edit(url);
                 }else {
-                    ctx.redirect("/user/all-urls");
+                    ctx.redirect("/user/dashboard");
                 }
                 ctx.redirect("/user/all-urls");
             });
