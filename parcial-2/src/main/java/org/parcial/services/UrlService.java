@@ -97,16 +97,17 @@ public class UrlService extends Repository<Url> {
     public List<VisitsDateDto> findUrlByUserDate(Integer id){
         List<Url> urlsFound = findAllUrlByUserActiveTrue(id);
         List<VisitsDateDto> visitsDateDtos = new ArrayList<>();
+        VisitsDateDto visitsDT = new VisitsDateDto();
+        VisitsDateDto visitsDY = new VisitsDateDto();
+        VisitsDateDto visitsDP = new VisitsDateDto();
+        Integer contT = 0;
+        Integer contY = 0;
+        Integer contPY = 0;
         for (Url u: urlsFound) {
             if (u.getVisits().isEmpty()){
-                List<VisitsDateDto> visists = new ArrayList<>();
+               return visitsDateDtos;
             }else {
-                VisitsDateDto visitsDT = new VisitsDateDto();
-                VisitsDateDto visitsDY = new VisitsDateDto();
-                VisitsDateDto visitsDP = new VisitsDateDto();
-                Integer contT = 0;
-                Integer contY = 0;
-                Integer contPY = 0;
+
                 for (Visit v :   u.getVisits()) {
                     if (v.getDate().equals(LocalDate.now())){
                         contT++;
@@ -117,19 +118,19 @@ public class UrlService extends Repository<Url> {
                     }
 
                 }
-                visitsDT.setDate(LocalDate.now());
-                visitsDY.setDate(LocalDate.now().minusDays(1));
-                visitsDP.setDate(LocalDate.now().minusDays(2));
-                visitsDT.setQuantity(contT);
-                visitsDY.setQuantity(contY);
-                visitsDP.setQuantity(contPY);
-                visitsDateDtos.add(visitsDT);
-                visitsDateDtos.add(visitsDY);
-                visitsDateDtos.add(visitsDP);
 
             }
 
         }
+        visitsDT.setDate(LocalDate.now());
+        visitsDY.setDate(LocalDate.now().minusDays(1));
+        visitsDP.setDate(LocalDate.now().minusDays(2));
+        visitsDT.setQuantity(contT);
+        visitsDY.setQuantity(contY);
+        visitsDP.setQuantity(contPY);
+        visitsDateDtos.add(visitsDT);
+        visitsDateDtos.add(visitsDY);
+        visitsDateDtos.add(visitsDP);
         return visitsDateDtos;
     }
 
