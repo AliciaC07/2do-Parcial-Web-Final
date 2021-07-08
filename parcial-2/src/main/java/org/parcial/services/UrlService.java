@@ -111,9 +111,9 @@ public class UrlService extends Repository<Url> {
                 visitsDT.setQuantity(contT);
                 visitsDY.setQuantity(contY);
                 visitsDP.setQuantity(contPY);
-                visitsDateDtos.add(visitsDT);
-                visitsDateDtos.add(visitsDY);
                 visitsDateDtos.add(visitsDP);
+                visitsDateDtos.add(visitsDY);
+                visitsDateDtos.add(visitsDT);
                return visitsDateDtos;
             }else {
 
@@ -137,9 +137,11 @@ public class UrlService extends Repository<Url> {
         visitsDT.setQuantity(contT);
         visitsDY.setQuantity(contY);
         visitsDP.setQuantity(contPY);
-        visitsDateDtos.add(visitsDT);
-        visitsDateDtos.add(visitsDY);
         visitsDateDtos.add(visitsDP);
+        visitsDateDtos.add(visitsDY);
+        visitsDateDtos.add(visitsDT);
+
+
         return visitsDateDtos;
     }
 
