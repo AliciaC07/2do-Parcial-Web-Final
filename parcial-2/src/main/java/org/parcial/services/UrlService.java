@@ -105,6 +105,15 @@ public class UrlService extends Repository<Url> {
         Integer contPY = 0;
         for (Url u: urlsFound) {
             if (u.getVisits().isEmpty()){
+                visitsDT.setDate(LocalDate.now());
+                visitsDY.setDate(LocalDate.now().minusDays(1));
+                visitsDP.setDate(LocalDate.now().minusDays(2));
+                visitsDT.setQuantity(contT);
+                visitsDY.setQuantity(contY);
+                visitsDP.setQuantity(contPY);
+                visitsDateDtos.add(visitsDT);
+                visitsDateDtos.add(visitsDY);
+                visitsDateDtos.add(visitsDP);
                return visitsDateDtos;
             }else {
 
