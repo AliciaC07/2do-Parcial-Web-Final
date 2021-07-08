@@ -3,11 +3,15 @@ package org.parcial.services;
 import com.google.zxing.WriterException;
 import org.parcial.models.Url;
 import org.parcial.models.User;
+import org.parcial.models.Visit;
+import org.parcial.models.dto.VisitsDateDto;
 import org.parcial.repository.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UrlService extends Repository<Url> {
@@ -89,6 +93,46 @@ public class UrlService extends Repository<Url> {
         List<Url> urls = query.getResultList();
         return urls;
     }
+
+    public List<VisitsDateDto> findUrlByUserDate(Integer id){
+        List<Url> urlsFound = findAllUrlByUserActiveTrue(id);
+        List<VisitsDateDto> visitsDateDtos = new ArrayList<>();
+        for (Url u: urlsFound) {
+            if (u.getVisits().isEmpty()){
+                List<VisitsDateDto> visists = new ArrayList<>();
+            }else {
+                VisitsDateDto visitsDT = new VisitsDateDto();
+                VisitsDateDto visitsDY = new VisitsDateDto();
+                VisitsDateDto visitsDP = new VisitsDateDto();
+                Integer contT = 0;
+                Integer contY = 0;
+                Integer contPY = 0;
+                for (Visit v :   u.getVisits()) {
+                    if (v.getDate().equals(LocalDate.now())){
+                        contT++;
+                    }else if (v.getDate().equals(LocalDate.now().minusDays(1))){
+                        contY++;
+                    }else if (v.getDate().equals(LocalDate.now().minusDays(2))){
+                        contPY++;
+                    }
+
+                }
+                visitsDT.setDate(LocalDate.now());
+                visitsDY.setDate(LocalDate.now().minusDays(1));
+                visitsDP.setDate(LocalDate.now().minusDays(2));
+                visitsDT.setQuantity(contT);
+                visitsDY.setQuantity(contY);
+                visitsDP.setQuantity(contPY);
+                visitsDateDtos.add(visitsDT);
+                visitsDateDtos.add(visitsDY);
+                visitsDateDtos.add(visitsDP);
+
+            }
+
+        }
+        return visitsDateDtos;
+    }
+
 
 
 

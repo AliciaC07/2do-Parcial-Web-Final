@@ -83,7 +83,7 @@ public class VisitController {
             model.put("pages", pages);
             model.put("totalPages", total);
             model.put("urls", urlService.findUrlsByUserActivePagination(userLogged.getId(),pageSize,currentPage));
-            model.put("graph", new Gson().toJson(visitService.getAllQuantityByDate()));
+            model.put("graph", new Gson().toJson(urlService.findUrlByUserDate(userLogged.getId())));
             ctx.render("public/html/dashboard.html", model);
         });
     }

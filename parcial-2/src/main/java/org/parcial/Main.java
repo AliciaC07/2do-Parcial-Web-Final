@@ -22,7 +22,7 @@ public class Main {
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
         }).start(7001);
-        org.practica.services.BootStrapService.startDb();
+        org.parcial.services.BootStrapService.startDb();
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
@@ -44,6 +44,9 @@ public class Main {
         UserService.getInstance().create(otro5);
         User otro6 = new User(null, "12379@gmail.com", spe.encryptPassword("123"),"User");
         UserService.getInstance().create(otro6);
+        app.get("/",ctx -> {
+            ctx.redirect("shortener/shorty");
+        });
 
 
 
