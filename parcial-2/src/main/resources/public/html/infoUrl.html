@@ -68,23 +68,6 @@
                 <div class="row">
                   <p class="url-card-title text-muted">Shortened url<br><a class="url-font" >shortly.traki-tech.games/$url.cuttedUrl</a></p>
                 </div>
-                <div class="accordion w-25">
-                  <div class="accordion-item">
-                    <p class="accordion-header url-card-title text-muted">
-                      <button class="accordion-button collapsed text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#collapse$!{url.id}" aria-expanded="true" aria-controls="collapseOne">
-                        QR Code
-                      </button>
-                    </p>
-                    <div id="collapse$!{url.id}" class="accordion-collapse collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                      <div class="accordion-body text-center">
-                        <img src="data:png;base64,$!{url.qrCode}" width="200" height="200">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer text-end">
-                <a class="btn btn-sm btn-danger" href="/url/delete/$!{url.id}">Delete</a>
               </div>
             </div>
              <!-- end foreach -->

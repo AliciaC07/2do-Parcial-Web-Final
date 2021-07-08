@@ -54,11 +54,19 @@ public class VisitService extends Repository<Visit> {
         EntityManager entityManager = getEntityManager();
         Query query = entityManager.createQuery("select p.operatingSystem, count(p.id) as Cantidad from Visit p group by p.operatingSystem");
         visit = query.getResultList();
-        for (Object[] obj: visit) {
-            VisitOperatingSystemDto vso = new VisitOperatingSystemDto();
-            vso.setOS(obj[0].toString());
-            vso.setQuantity(Integer.parseInt(obj[1].toString()));
-            visitsQuantity.add(vso);
+        if (visit.isEmpty()){
+            VisitOperatingSystemDto v = new VisitOperatingSystemDto();
+            v.setOS("Operating System");
+            v.setQuantity(0);
+            visitsQuantity.add(v);
+        }else {
+            for (Object[] obj: visit) {
+                VisitOperatingSystemDto vso = new VisitOperatingSystemDto();
+                vso.setOS(obj[0].toString());
+                vso.setQuantity(Integer.parseInt(obj[1].toString()));
+                visitsQuantity.add(vso);
+            }
+
         }
 
         return visitsQuantity;
@@ -71,12 +79,21 @@ public class VisitService extends Repository<Visit> {
         EntityManager entityManager = getEntityManager();
         Query query = entityManager.createQuery("select p.browser, count(p.id) as Cantidad from Visit p group by p.browser");
         visit = query.getResultList();
-        for (Object[] obj: visit) {
-            VisitBrowserDto vso = new VisitBrowserDto();
-            vso.setBrowser(obj[0].toString());
-            vso.setQuantity(Integer.parseInt(obj[1].toString()));
-            visitsQuantity.add(vso);
+        if (visit.isEmpty()){
+            VisitBrowserDto v = new VisitBrowserDto();
+            v.setBrowser("Browser");
+            v.setQuantity(0);
+            visitsQuantity.add(v);
+
+        }else {
+            for (Object[] obj: visit) {
+                VisitBrowserDto vso = new VisitBrowserDto();
+                vso.setBrowser(obj[0].toString());
+                vso.setQuantity(Integer.parseInt(obj[1].toString()));
+                visitsQuantity.add(vso);
+            }
         }
+
 
         return visitsQuantity;
 
