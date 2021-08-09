@@ -143,7 +143,7 @@ public class ShortenerController {
                         url.setUser(user);
                         url.setDateAdded(LocalDate.now());
                         urlService.create(url);
-                        byte [] qrcode = principal.getQRCodeImage("https://"+domain+"/url/info/"+url.getId(),500,500);
+                        byte [] qrcode = principal.getQRCodeImage("https://"+domain+url.getCuttedUrl(),500,500);
                         url.setQrCode(principal.getQrImageBase64(qrcode));
                         urlService.edit(url);
                     }else {
