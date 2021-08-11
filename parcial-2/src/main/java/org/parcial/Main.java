@@ -20,7 +20,7 @@ public class Main {
             config.registerPlugin(new RouteOverviewPlugin("/public"));
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
-            JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
+            JavalinRenderer.register(JavalinVelocity.INSTANCE, ".vm");
         }).start(7001);
         org.parcial.services.BootStrapService.startDb();
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
@@ -46,6 +46,10 @@ public class Main {
         UserService.getInstance().create(otro6);
         app.get("/",ctx -> {
             ctx.redirect("shortener/shorty");
+        });
+        app.after(ctx -> {
+            //System.out.println("Enviando el header de seguridad para el Service Worker");
+            ctx.header("Service-Worker-Allowed", "/");
         });
 
 

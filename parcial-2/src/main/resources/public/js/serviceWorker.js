@@ -2,7 +2,9 @@ var CACHE_NAME = 'shortly-cache';
 //listado de
 var urlsToCache = [
     '/html/',
-    '/user/dashboard',
+    '/html/offline.html',
+    '/html/dashboard.vm',
+    '/images/fondo-landing-3.jpg'
 ];
 //ruta para fallback.
 var fallback = "/html/offline.html"
