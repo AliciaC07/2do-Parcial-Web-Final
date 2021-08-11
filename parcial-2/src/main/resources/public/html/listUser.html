@@ -68,7 +68,7 @@
                     </thead>
                     <tbody>
                     #foreach($user in $users)
-                    #if($userLogged.id != $user.id)
+                    #if($user.rol != "Admin")
                     <tr>
                         <th scope="row">$user.id</th>
                         <td>$user.userName</td>

@@ -120,6 +120,17 @@ public class UserController {
                 }
                 ctx.redirect("/user/all-urls");
             });
+            app.get("/url/delete-user/:id", ctx -> {
+                Integer id = ctx.pathParam("id", Integer.class).get();
+                Url url = UrlService.getInstance().find(id);
+                if (url != null){
+                    url.setActive(false);
+                    UrlService.getInstance().edit(url);
+                }else {
+                    ctx.redirect("/user/dashboard");
+                }
+                ctx.redirect("/user/dashboard");
+            });
             app.get("/url/info/:id", ctx -> {
                 Map<String, Object> model = new HashMap<>();
                 User userLogged = null;
