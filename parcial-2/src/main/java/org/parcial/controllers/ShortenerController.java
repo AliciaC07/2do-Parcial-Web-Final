@@ -9,14 +9,11 @@ import org.parcial.models.Visit;
 import org.parcial.services.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class ShortenerController {
     private final Javalin app;
@@ -71,7 +68,7 @@ public class ShortenerController {
                 model.put("cuttedUrl", url.getCuttedUrl());
                 model.put("hashUrl", url.getCuttedUrl());
                 model.put("urlCut", domain+url.getCuttedUrl());
-                ctx.render("/public/html/landing.html", model);
+                ctx.render("/public/html/landing.vm", model);
 
 
             });
@@ -113,7 +110,7 @@ public class ShortenerController {
                     model.put("logged", false);
                     model.put("userLogged", "");
                 }
-                ctx.render("/public/html/landing.html", model);
+                ctx.render("/public/html/landing.vm", model);
 
 
                 });

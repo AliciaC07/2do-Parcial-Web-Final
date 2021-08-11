@@ -3,7 +3,6 @@ package org.parcial.controllers;
 import com.google.gson.Gson;
 import io.javalin.Javalin;
 import org.parcial.models.User;
-import org.parcial.models.dto.VisitsDateDto;
 import org.parcial.services.*;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ public class VisitController {
             model.put("totalPages", total);
             model.put("urls", urlService.findUrlsByUserActivePagination(userLogged.getId(),pageSize,currentPage));
             model.put("graph", new Gson().toJson(urlService.findUrlByUserDate(userLogged.getId())));
-            ctx.render("public/html/dashboard.html", model);
+            ctx.render("public/html/dashboard.vm", model);
         });
     }
 }
