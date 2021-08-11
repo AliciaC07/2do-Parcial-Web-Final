@@ -9,6 +9,8 @@
     <title>Dashboard</title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- react + styled-components + microlink -->
+    <script src="https://cdn.jsdelivr.net/combine/npm/react@16/umd/react.production.min.js,npm/react-dom@16/umd/react-dom.production.min.js,npm/react-is@16/umd/react-is.production.min.js,npm/styled-components@5/dist/styled-components.min.js,npm/@microlink/mql@latest/dist/mql.min.js,npm/@microlink/vanilla@5/dist/microlink.min.js"></script>
 </head>
 <body>
 
@@ -119,7 +121,8 @@
                                 <div class="card mt-3">
                                     <div class="card-body">
                                         <div class="row">
-                                            <p class="url-card-title text-muted col-md-9">Original Link<br><a class="url-font">$url.originalUrl</a></p>
+                                            <p class="url-card-title text-muted col-md-9">Original Link<br>
+                                                <a href="http://${url.originalUrl}" class="link-preview" target="_blank"></a></p>
                                             <p class="col-md url-font text-muted text-end">$url.visits.size() clicks</p>
                                         </div>
                                         <div class="row">
@@ -194,6 +197,22 @@
         </div>
     </section>
 </aside>
+<script>
+    document.addEventListener('DOMContentLoaded', function (event) {
+        // Example 1
+        // Replace all `a` tags for microlink cards
+        //microlink('a')
+        // Example 2
+        // Replace all elements with `link-preview` class
+        // for microlink cards
+        //microlink('.link-previews')
+        // Example 3
+        // Replace all elements with `link-preview` class
+        // for microlink cards, passing API specific options
+        // microlink('.link-previews', { size: 'large' })
+        microlink('.link-preview',{media: ['audio' , 'iframe' , 'image' , 'logo' , 'screenshot' , 'video'],size: 'normal'})
+    })
+</script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="../js/Chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
