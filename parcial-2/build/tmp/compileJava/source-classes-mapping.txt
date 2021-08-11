@@ -28,13 +28,13 @@ org/parcial/models/Url.java
  org.parcial.models.Url
 org/parcial/config/UrlEncodeShort.java
  org.parcial.config.UrlEncodeShort
-org/parcial/Main.java
- org.parcial.Main
+org/parcial/controllers/VisitController.java
+ org.parcial.controllers.VisitController
 org/parcial/services/UserService.java
  org.parcial.services.UserService
 org/parcial/config/JwtGen.java
  org.parcial.config.JwtGen
 org/parcial/models/User.java
  org.parcial.models.User
-org/parcial/controllers/VisitController.java
- org.parcial.controllers.VisitController
+org/parcial/Main.java
+ org.parcial.Main

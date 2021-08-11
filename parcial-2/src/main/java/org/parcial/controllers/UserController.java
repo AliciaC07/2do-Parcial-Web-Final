@@ -13,9 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.javalin.apibuilder.ApiBuilder.path;
-import static io.javalin.apibuilder.ApiBuilder.*;
-
 public class UserController {
     private final Javalin app;
     Principal principal = Principal.getInstance();
@@ -40,7 +37,7 @@ public class UserController {
                         ctx.redirect("/shortener");
                     }
                     model.put("logged", false);
-                    ctx.render("/public/html/login.html",model);
+                    ctx.render("/public/html/login.vm",model);
                 });
             app.get("/user/all-urls", ctx -> {
                Map<String, Object> model = new HashMap<>();
@@ -107,7 +104,7 @@ public class UserController {
                 model.put("pages", pages);
                 model.put("totalPages", total);
                 model.put("urls", UrlService.getInstance().findAllByActiveTruePagination(pageSize, currentPage));
-                ctx.render("public/html/listUrl.html", model);
+                ctx.render("public/html/listUrl.vm", model);
             });
             app.get("/url/delete/:id", ctx -> {
                 Integer id = ctx.pathParam("id", Integer.class).get();
@@ -171,7 +168,7 @@ public class UserController {
                 model.put("url", url);
                 model.put("osGraph", new Gson().toJson(visitService.getQuantityByOperatingSystem()));
                 model.put("browserGraph", new Gson().toJson(visitService.getQuantityByBrowser()));
-                ctx.render("public/html/infoUrl.html", model);
+                ctx.render("public/html/infoUrl.vm", model);
             });
 
             app.get("/user/users", ctx -> {
@@ -240,14 +237,14 @@ public class UserController {
                      model.put("userLogged", userLogged);
 
 
-                    ctx.render("/public/html/listUser.html", model);
+                    ctx.render("/public/html/listUser.vm", model);
                 });
             app.post("/user/login", ctx -> {
                     String userName = ctx.formParam("email");
                     String password = ctx.formParam("password");
 
                     if (userName == null || password == null){
-                        ctx.redirect("/public/login.html");
+                        ctx.redirect("/public/login.vm");
                         return;
                     }
                     User userLog = userService.authUser(userName,password);
@@ -295,7 +292,7 @@ public class UserController {
                         ctx.redirect("/shortener");
                     }
                     model.put("logged", false);
-                    ctx.render("/public/html/CreateUser.html",model);
+                    ctx.render("/public/html/CreateUser.vm",model);
                 });
             app.post("/user/register", ctx -> {
                     String userName = ctx.formParam("email");
@@ -387,7 +384,7 @@ public class UserController {
                     }
                    User editUser = userService.findById(ctx.pathParam("id", Integer.class).get());
                     model.put("user", editUser);
-                    ctx.render("/public/html/editUser.html", model);
+                    ctx.render("/public/html/editUser.vm", model);
                 });
             app.post("/user/edit/:id", ctx -> {
                     Integer id = ctx.pathParam("id", Integer.class).get();
