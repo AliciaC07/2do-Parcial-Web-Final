@@ -47,6 +47,10 @@ public class Main {
         app.get("/",ctx -> {
             ctx.redirect("shortener/shorty");
         });
+        app.after(ctx -> {
+            //System.out.println("Enviando el header de seguridad para el Service Worker");
+            ctx.header("Service-Worker-Allowed", "/");
+        });
 
 
 
