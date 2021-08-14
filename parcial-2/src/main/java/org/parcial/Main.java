@@ -7,6 +7,7 @@ import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinVelocity;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.controllers.ShortenerController;
+import org.parcial.controllers.SoapController;
 import org.parcial.controllers.UserController;
 import org.parcial.controllers.VisitController;
 import org.parcial.models.User;
@@ -21,12 +22,17 @@ public class Main {
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".vm");
-        }).start(7001);
+
+        });
         org.parcial.services.BootStrapService.startDb();
+        new SoapController(app).applyRoutes();;
+        app.start(7001);
+
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
         new VisitController(app).applyRoutes();
+
         StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
         User user = new User(null, "alicruz0703@gmail.com", spe.encryptPassword("123"), "Admin");
         UserService.getInstance().create(user);

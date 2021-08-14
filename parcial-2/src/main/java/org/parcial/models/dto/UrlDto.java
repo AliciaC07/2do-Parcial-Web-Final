@@ -1,0 +1,35 @@
+package org.parcial.models.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.parcial.models.User;
+import org.parcial.models.Visit;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+@Getter
+@Setter
+public class UrlDto {
+    private Integer id;
+
+    private String originalUrl;
+
+    private String cuttedUrl;
+
+
+    private User user;
+
+
+    private Boolean active = true;
+
+
+    private String qrCode;
+
+
+    private String dateAdded;
+
+
+    private Set<Visit> visits = new HashSet<>();
+}
