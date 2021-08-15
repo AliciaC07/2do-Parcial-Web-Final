@@ -166,8 +166,8 @@ public class UserController {
                 Integer id = ctx.pathParam("id", Integer.class).get();
                 Url url = UrlService.getInstance().find(id);
                 model.put("url", url);
-                model.put("osGraph", new Gson().toJson(visitService.getQuantityByOperatingSystem()));
-                model.put("browserGraph", new Gson().toJson(visitService.getQuantityByBrowser()));
+                model.put("osGraph", new Gson().toJson(visitService.getQuantityByOperatingSystem(url.getId())));
+                model.put("browserGraph", new Gson().toJson(visitService.getQuantityByBrowser(url.getId())));
                 ctx.render("public/html/infoUrl.vm", model);
             });
 

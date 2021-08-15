@@ -1,6 +1,8 @@
 package org.parcial.api;
 
 import com.google.zxing.WriterException;
+import org.modelmapper.ModelMapper;
+import org.parcial.config.UrlEncodeShort;
 import org.parcial.models.Url;
 import org.parcial.models.User;
 import org.parcial.models.dto.UrlDto;
@@ -32,29 +34,37 @@ public class SoapShortly {
         return urlService.findAllUrlByUserActiveTrue(id);
     }
     @WebMethod
-    public UrlDto createUrl(UrlDto url) throws IOException, WriterException {
-        Url urlCreate = new Url();
-        urlCreate.setCuttedUrl(url.getCuttedUrl());
-        urlCreate.setOriginalUrl(url.getOriginalUrl());
-        urlCreate.setDateAdded(LocalDate.parse(url.getDateAdded()));
-        if (url.getUser() != null){
-            urlCreate.setUser(url.getUser());
+    public UrlDto createUrl(String originalUrl, Integer id) throws IOException, WriterException {
+        Url urlnew = new Url();
+        UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
+        String shortened = urlEncodeShort.encodeUrl(originalUrl);
+        urlnew.setOriginalUrl(urlEncodeShort.decodeUrl(shortened));
+        urlnew.setCuttedUrl(shortened);
+        if (id != null){
+            User user = userService.findById(id);
+            urlnew.setUser(user);
+            urlnew.setDateAdded(LocalDate.now());
+            byte [] qrcode = principal.getQRCodeImage("https://"+domain+urlnew.getCuttedUrl(),500,500);
+            urlnew.setQrCode(principal.getQrImageBase64(qrcode));
+            urlService.create(urlnew);
+        }else {
+            urlnew.setDateAdded(LocalDate.now());
+            byte [] qrcode = principal.getQRCodeImage("https://"+domain+urlnew.getCuttedUrl(),500,500);
+            urlnew.setQrCode(principal.getQrImageBase64(qrcode));
+            urlService.create(urlnew);
         }
-        byte [] qrcode = principal.getQRCodeImage("https://"+domain+url.getCuttedUrl(),500,500);
-        urlCreate.setQrCode(principal.getQrImageBase64(qrcode));
-
-        urlService.create(urlCreate);
-        return url;
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(urlnew, UrlDto.class);
 
     }
     @WebMethod
-    public List<VisitOperatingSystemDto> getVisitOS(){
-        return visitService.getQuantityByOperatingSystem();
+    public List<VisitOperatingSystemDto> getVisitOS(Integer idUrl){
+        return visitService.getQuantityByOperatingSystem(idUrl);
     }
 
     @WebMethod
-    public List<VisitBrowserDto> getVisitB(){
-        return visitService.getQuantityByBrowser();
+    public List<VisitBrowserDto> getVisitB(Integer id ){
+        return visitService.getQuantityByBrowser(id);
     }
 
     @WebMethod
