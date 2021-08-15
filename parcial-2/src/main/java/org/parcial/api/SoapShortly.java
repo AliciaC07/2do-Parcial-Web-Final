@@ -2,6 +2,7 @@ package org.parcial.api;
 
 import com.google.zxing.WriterException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.parcial.config.UrlEncodeShort;
 import org.parcial.models.Url;
 import org.parcial.models.User;
@@ -18,6 +19,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebService
@@ -30,8 +32,9 @@ public class SoapShortly {
     private UserService userService = UserService.getInstance();
 
     @WebMethod
-    public List<Url> getUrlsByUser(Integer id){
-        return urlService.findAllUrlByUserActiveTrue(id);
+    public List<UrlDto> getUrlsByUser(Integer id){
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(urlService.findAllUrlByUserActiveTrue(id), new TypeToken<List<UrlDto>>() {}.getType());
     }
     @WebMethod
     public UrlDto createUrl(String originalUrl, Integer id) throws IOException, WriterException {
