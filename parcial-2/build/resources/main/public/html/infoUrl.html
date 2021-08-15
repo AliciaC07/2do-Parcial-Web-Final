@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/css/fonts.css">
+  <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+  <meta charset="UTF-8">
+  <title>Url Analytics</title>
+</head>
+<body>
+
+
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/shortener">Url shortener</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse  navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/shortener">Home</a>
+          </li>
+          #if($logged == false)
+          <li class="nav-item">
+            <a class="nav-link" href="/user/register">Sign up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/user/login">Log in</a>
+          </li>
+          #else
+          <li class="nav-item">
+            <a class="nav-link" href="/user/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              $userLogged.userName
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              #if($userLogged.rol == "Admin")
+              <li><a class="dropdown-item" href="/user/users">User List</a></li>
+              <li><a class="dropdown-item" href="/user/all-urls">Url List</a></li>
+              #end
+              <li><a class="dropdown-item" href="/user/logout">Log out</a></li>
+            </ul>
+          </li>
+          #end
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<section>
+<div class="container-fluid">
+  <!-- General information -->
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md card mt-3">
+          <div class="card-body">
+            <h5 class="card-title titleFont text-muted">Url</h5>
+            <div class="card mt-3">
+              <div class="card-body">
+                <div class="row">
+                  <p class="url-card-title text-muted col-md-9">Original Link<br><a class="url-font" >$url.originalUrl</a></p>
+                  <p class="col-md url-font text-muted text-end">$url.visits.size() clicks</p>
+                </div>
+                <div class="row">
+                  <p class="url-card-title text-muted">Shortened url<br><a class="url-font" >shortly.traki-tech.games/$url.cuttedUrl</a></p>
+                </div>
+              </div>
+            </div>
+             <!-- end foreach -->
+          </div>
+        <div class="col-md-2"></div>
+      </div>
+        <div class="col-md-2"></div>
+      </div>
+  <!-- system OS graph -->
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="card col-md mt-3">
+          <div class="card-body">
+            <h5 class="card-title titleFont text-muted">Total clicks per Operating Systems</h5>
+            <div class="text-center"><div class="col-md" id="OS_graph" data-graph='$osGraph'></div></div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+  <!-- browser graph -->
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="card col-md mt-3 mb-3">
+          <div class="card-body">
+            <h5 class="card-title titleFont text-muted">Total clicks per Browser</h5>
+            <div class="text-center"><div class="col-md" id="browser_graph" data-graph='$browserGraph'></div></div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+</section>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="/js/browserGraph.js"></script>
+<script src="/js/osGraph.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+</html>
