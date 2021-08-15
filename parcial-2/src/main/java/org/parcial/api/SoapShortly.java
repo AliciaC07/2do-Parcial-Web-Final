@@ -6,10 +6,7 @@ import org.modelmapper.TypeToken;
 import org.parcial.config.UrlEncodeShort;
 import org.parcial.models.Url;
 import org.parcial.models.User;
-import org.parcial.models.dto.UrlDto;
-import org.parcial.models.dto.VisitBrowserDto;
-import org.parcial.models.dto.VisitOperatingSystemDto;
-import org.parcial.models.dto.VisitsClickDto;
+import org.parcial.models.dto.*;
 import org.parcial.services.Principal;
 import org.parcial.services.UrlService;
 import org.parcial.services.UserService;
@@ -61,14 +58,13 @@ public class SoapShortly {
 
     }
     @WebMethod
-    public List<VisitOperatingSystemDto> getVisitOS(Integer idUrl){
-        return visitService.getQuantityByOperatingSystem(idUrl);
+    public InfoDto getVisitInfo(Integer idUrl){
+        InfoDto infoDto = new InfoDto();
+        infoDto.setVisitBrowserDto(visitService.getQuantityByBrowser(idUrl));
+        infoDto.setVisitOperatingSystemDto(visitService.getQuantityByOperatingSystem(idUrl));
+        return infoDto;
     }
 
-    @WebMethod
-    public List<VisitBrowserDto> getVisitB(Integer id ){
-        return visitService.getQuantityByBrowser(id);
-    }
 
     @WebMethod
     public User login(User user){

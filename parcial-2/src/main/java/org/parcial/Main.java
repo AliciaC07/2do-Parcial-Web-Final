@@ -6,6 +6,7 @@ import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinVelocity;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.parcial.api.RestShortlyController;
 import org.parcial.controllers.ShortenerController;
 import org.parcial.controllers.SoapController;
 import org.parcial.controllers.UserController;
@@ -25,7 +26,8 @@ public class Main {
 
         });
         org.parcial.services.BootStrapService.startDb();
-        new SoapController(app).applyRoutes();;
+        new SoapController(app).applyRoutes();
+        new RestShortlyController(app).applyRoutes();
         app.start(7001);
 
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));

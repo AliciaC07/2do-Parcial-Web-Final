@@ -49,10 +49,9 @@ public class JwtGen {
     public static Claims decodeJWT(String jwt) {
 
         //This line will throw an exception if it is not a signed JWS (as expected)
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(Base64.getEncoder().encode(SECRET_KEY.getBytes()))
                 .parseClaimsJws(jwt).getBody();
-        return claims;
     }
 
 

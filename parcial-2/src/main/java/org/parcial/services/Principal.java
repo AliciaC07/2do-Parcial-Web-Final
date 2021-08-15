@@ -57,6 +57,19 @@ public class Principal {
                 jwtTimeToLive // used to calculate expiration (claim = exp)
         );
     }
+    public String tokenCreated2(User user){
+        String jwtId = "PacoFish";
+        String jwtIssuer = "JWT Gen";
+        String jwtSubject = user.getUserName();
+        int jwtTimeToLive = 20000;
+
+        return JwtGen.createJWT(
+                jwtId, // claim = jti
+                jwtIssuer, // claim = iss
+                jwtSubject, // claim = sub
+                jwtTimeToLive // used to calculate expiration (claim = exp)
+        );
+    }
     public Boolean tokenVerify(String userName, String jwt){
         String jwtId = "PacoFish";
         String jwtIssuer = "JWT Gen";
