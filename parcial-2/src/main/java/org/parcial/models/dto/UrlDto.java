@@ -18,7 +18,7 @@ public class UrlDto {
     private String cuttedUrl;
 
 
-    private User user;
+    private UserDto user;
 
 
     private Boolean active = true;
@@ -30,5 +30,5 @@ public class UrlDto {
     private String dateAdded;
 
 
-    private Set<Visit> visits = new HashSet<>();
+    private Set<VisitDto> visits = new HashSet<>();
 }

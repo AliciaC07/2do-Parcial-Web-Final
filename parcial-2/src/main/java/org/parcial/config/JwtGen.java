@@ -39,6 +39,7 @@ public class JwtGen {
         if (ttlMillis >= 0) {
             long expMillis = nowMillis + ttlMillis;
             Date exp = new Date(expMillis);
+            System.out.println(exp.toString());
             builder.setExpiration(exp);
         }
 

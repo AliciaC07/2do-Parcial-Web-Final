@@ -1,5 +1,6 @@
 package org.parcial.models;
 
+import com.google.gson.annotations.JsonAdapter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,7 @@ public class Url implements Serializable {
     @Column
     private String cuttedUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User user;
 
     @Column

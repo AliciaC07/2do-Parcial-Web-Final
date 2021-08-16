@@ -48,7 +48,7 @@ public class Principal {
         String jwtId = "PacoFish";
         String jwtIssuer = "JWT Gen";
         String jwtSubject = user.getUserName();
-        int jwtTimeToLive = 620000;
+        int jwtTimeToLive = 2000000;
 
         return JwtGen.createJWT(
                 jwtId, // claim = jti
@@ -61,7 +61,7 @@ public class Principal {
         String jwtId = "PacoFish";
         String jwtIssuer = "JWT Gen";
         String jwtSubject = user.getUserName();
-        int jwtTimeToLive = 20000;
+        int jwtTimeToLive = 1000000;
 
         return JwtGen.createJWT(
                 jwtId, // claim = jti
@@ -78,6 +78,26 @@ public class Principal {
                 Claims claims = JwtGen.decodeJWT(jwt);
                 if (claims.getId().equals(jwtId) && claims.getIssuer().equals(jwtIssuer)
                         && claims.getSubject().equals(userName)){
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+
+
+        }catch (JwtException e){
+            System.out.println("Token is invalid");
+        }
+
+        return false;
+    }
+    public Boolean tokenVerify1(String jwt){
+        String jwtId = "PacoFish";
+        String jwtIssuer = "JWT Gen";
+        try{
+            if (jwt != null){
+                Claims claims = JwtGen.decodeJWT(jwt);
+                if (claims.getId().equals(jwtId) && claims.getIssuer().equals(jwtIssuer)){
                     return true;
                 }else {
                     return false;
