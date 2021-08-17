@@ -49,12 +49,18 @@ public class RestShortlyController extends BaseController {
                 url.setCuttedUrl(shortened);
                 ModelMapper modelMapper = new ModelMapper();
                 url.setUser(modelMapper.map(originalUrl.getUser(), User.class));
+                String preview = "http://api.linkpreview.net/?key=0cbfe7534103c6303369cf71fbbd5b53&q="+originalUrl.getOriginalUrl();
+                String image  = principal.requestImage(preview);
+                originalUrl.setPreview(principal.getByteArrayFromImageURL(image));
                 if (url.getUser() != null){
                     url.setDateAdded(LocalDate.now());
                     byte [] qrcode = principal.getQRCodeImage("https://"+domain+url.getCuttedUrl(),500,500);
                     url.setQrCode(principal.getQrImageBase64(qrcode));
                 }
-                ctx.json(urlService.create(url));
+                urlService.create(url);
+                originalUrl = modelMapper.map(url, UrlDto.class);
+                originalUrl.setPreview(principal.getByteArrayFromImageURL(image));
+                ctx.json(originalUrl);
             });
             app.get("/api/visits-info/:id", ctx -> {
                 Integer id = ctx.pathParam("id", Integer.class).get();
@@ -85,14 +91,14 @@ public class RestShortlyController extends BaseController {
                 String type = "Bearer";
 
                 if (ctx.req.getHeader(header) == null || !ctx.req.getHeader(header).startsWith(type)){
-                    ctx.res.sendError(401, "You don't have auuthorization");
+                    ctx.res.sendError(401, "You don't have authorization");
                 }
                 String jwt = ctx.req.getHeader(header).replace(type,"");
                 Boolean verify = principal.tokenVerify1(jwt);
                 System.out.println(verify);
                 if (!verify){
                      ctx.json("You don't have authorization");
-                     ctx.res.sendError(401, "You don't have auuthorization");
+                     ctx.res.sendError(401, "You don't have authorization");
                 }
 
 

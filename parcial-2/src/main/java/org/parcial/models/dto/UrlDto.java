@@ -29,6 +29,8 @@ public class UrlDto {
 
     private String dateAdded;
 
+    private String preview;
+
 
     private Set<VisitDto> visits = new HashSet<>();
 }

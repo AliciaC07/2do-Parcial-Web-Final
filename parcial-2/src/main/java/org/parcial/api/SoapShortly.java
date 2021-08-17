@@ -34,12 +34,15 @@ public class SoapShortly {
         return modelMapper.map(urlService.findAllUrlByUserActiveTrue(id), new TypeToken<List<UrlDto>>() {}.getType());
     }
     @WebMethod
-    public UrlDto createUrl(String originalUrl, Integer id) throws IOException, WriterException {
+    public UrlDto createUrl(String originalUrl, Integer id) throws IOException, WriterException, InterruptedException {
         Url urlnew = new Url();
         UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
         String shortened = urlEncodeShort.encodeUrl(originalUrl);
         urlnew.setOriginalUrl(urlEncodeShort.decodeUrl(shortened));
         urlnew.setCuttedUrl(shortened);
+        String preview = "http://api.linkpreview.net/?key=0cbfe7534103c6303369cf71fbbd5b53&q="+originalUrl;
+        String image  = principal.requestImage(preview);
+
         if (id != null){
             User user = userService.findById(id);
             urlnew.setUser(user);
@@ -54,7 +57,9 @@ public class SoapShortly {
             urlService.create(urlnew);
         }
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(urlnew, UrlDto.class);
+        UrlDto urlDto = modelMapper.map(urlnew, UrlDto.class);
+        urlDto.setPreview(principal.getByteArrayFromImageURL(image));
+        return urlDto;
 
     }
     @WebMethod
