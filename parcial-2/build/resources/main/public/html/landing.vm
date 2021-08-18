@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="../css/landing.css">
+    <title>Url Shortener</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/shortener">Url shortener</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse  navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/shortener">Home</a>
+                    </li>
+                    #if($logged == false)
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/register">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/login">Log in</a>
+                    </li>
+                    #else
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            $userLogged.userName
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            #if($userLogged.rol == "Admin")
+                            <li><a class="dropdown-item" href="/user/users">User List</a></li>
+                            <li><a class="dropdown-item" href="/user/all-urls">Url List</a></li>
+                            #end
+                            <li><a class="dropdown-item" href="/user/logout">Log out</a></li>
+                        </ul>
+                    </li>
+                    #end
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<section>
+    <div class="card rounded-0 bg-dark text-white mb-3">
+        <img class="card-img" src="../images/fondo-landing-3.jpg" width="2560" height="700" alt="yo habia ponido una foto aqui">
+        <div class="card-img-overlay">
+            <h2 class="card-title titleFont">Url shortener</h2>
+            <h4 class="card-text titleFont">Your best option when shortening your urls</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="container-fluid col-md mt-3">
+            <div class="card mx-auto my-auto shadow-lg p-3 mb-5 bg-body rounded">
+                #if($cuttedUrl == "")
+                <form method="post" action="/shortener/register/reg-url">
+                    <div class=" input-group input-group-lg ">
+                        <input type="text" name="originalUrl" id="url" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-primary" type="submit" id="button-addon2">Shorten</button>
+                    </div>
+                </form>
+                #else
+                <div class=" input-group input-group-lg ">
+                    <input type="text" name="cuttedUrl" id="urlCutted" value="$urlCut" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <a class="btn btn-outline-primary" type="button" href="/$hashUrl" id="button-addon3">Go</a>
+                </div>
+                #end
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/js/serviceWorker.js', {scope: '/'}).then(function(registration) {
+                // Notificando el registro del service workwe
+                console.log('Registrando el servicio en el ambiente: ', registration.scope);
+            }, function(err) {
+                console.log('Service Worker falló el registro: ', err);
+            });
+        });
+    }
+</script>
+</body>
+</html>
