@@ -1,7 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.google.protobuf' version '0.8.17' //plugin para incluir la compilación de gRPC, ver: https://github.com/grpc/grpc-java#generated-code
     id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'idea' //plugins para la integración con el IDEA.
 }
 
 group 'org.example'
@@ -50,8 +52,49 @@ dependencies {
     compile "com.sun.xml.ws:jaxws-rt:2.3.1"
     compile "com.sun.xml.ws:rt:2.3.1"
 
+    implementation 'io.grpc:grpc-netty-shaded:1.39.0'
+    implementation 'io.grpc:grpc-protobuf:1.39.0'
+    implementation 'io.grpc:grpc-stub:1.39.0'
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    implementation 'com.google.protobuf:protobuf-java:3.17.3'
+
+
 
 }
+
+//Tareas para la generación del código.
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.17.2"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.39.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+
+    generatedFilesBaseDir = "$projectDir/generated"
+}
+
+//Tareas para integrar con el
+clean {
+    delete protobuf.generatedFilesBaseDir
+}
+
+idea {
+    module {
+        // proto files and generated Java files are automatically added as
+        // source dirs.
+        // If you have additional sources, add them here:
+        sourceDirs += file("src/generated");
+    }
+}
+
 shadowJar{
     archivesBaseName = 'app'
     archiveClassifier = ''

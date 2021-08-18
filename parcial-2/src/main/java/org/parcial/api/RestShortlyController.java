@@ -100,15 +100,7 @@ public class RestShortlyController extends BaseController {
                      ctx.json("You don't have authorization");
                      ctx.res.sendError(401, "You don't have authorization");
                 }
-
-
-
-
             });
-
-
-
         });
-
     }
 }
