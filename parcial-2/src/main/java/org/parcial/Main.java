@@ -6,6 +6,7 @@ import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinVelocity;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.parcial.Server.UrlServer;
 import org.parcial.api.RestShortlyController;
 import org.parcial.controllers.ShortenerController;
 import org.parcial.controllers.SoapController;
@@ -17,13 +18,13 @@ import org.parcial.services.UserService;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, WriterException {
+    public static void main(String[] args) throws IOException, WriterException,InterruptedException {
         Javalin app = Javalin.create(config -> {
             config.registerPlugin(new RouteOverviewPlugin("/public"));
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
-        }).start(7001);
+        });
         org.parcial.services.BootStrapService.startDb();
         new SoapController(app).applyRoutes();
         new RestShortlyController(app).applyRoutes();
@@ -58,6 +59,10 @@ public class Main {
             //System.out.println("Enviando el header de seguridad para el Service Worker");
             ctx.header("Service-Worker-Allowed", "/");
         });
+
+        UrlServer server = new UrlServer();
+        server.start();
+        server.blockUntilShutdown();
 
 
 
