@@ -22,7 +22,7 @@ public class Main {
             config.registerPlugin(new RouteOverviewPlugin("/public"));
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
-            JavalinRenderer.register(JavalinVelocity.INSTANCE, ".vm");
+            JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
 
         });
         org.parcial.services.BootStrapService.startDb();

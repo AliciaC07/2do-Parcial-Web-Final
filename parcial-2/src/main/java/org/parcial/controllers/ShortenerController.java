@@ -68,7 +68,7 @@ public class ShortenerController {
                 model.put("cuttedUrl", url.getCuttedUrl());
                 model.put("hashUrl", url.getCuttedUrl());
                 model.put("urlCut", domain+url.getCuttedUrl());
-                ctx.render("/public/html/landing.vm", model);
+                ctx.render("/public/html/landing.html", model);
 
 
             });
@@ -110,7 +110,7 @@ public class ShortenerController {
                     model.put("logged", false);
                     model.put("userLogged", "");
                 }
-                ctx.render("/public/html/landing.vm", model);
+                ctx.render("/public/html/landing.html", model);
 
 
                 });

@@ -1,10 +1,20 @@
-var CACHE_NAME = 'shortly-cache';
+var CACHE_NAME = 'shortly-cache-v1';
 //listado de
 var urlsToCache = [
-    '/html/',
+    '/',
+    '/Fonts/Inconsolata/static/Inconsolata_Condensed/Inconsolata_Condensed-Bold.ttf',
+    '/Fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf',
+    '/favicon.ico',
+    '/css/dashboard.css',
+    '/css/fonts.css',
+    '/css/landing.css',
     '/html/offline.html',
-    '/html/dashboard.vm',
-    '/images/fondo-landing-3.jpg'
+    '/user/dashboard',
+    '/images/qr_code tester.jpg',
+    '/images/fondo-landing-3.jpg',
+    '/js/indexDB.js',
+    '/js/status.js',
+    '/js/Chart.js'
 ];
 //ruta para fallback.
 var fallback = "/html/offline.html"
@@ -31,12 +41,14 @@ self.addEventListener('activate', evt => {
     evt.waitUntil(
         caches.keys().then(function(keyList) { //Recupera todos los cache activos.
             return Promise.all(keyList.map(function(key) {
+                console.log(key.toString())
                 if (CACHE_NAME.indexOf(key) === -1) { //si no es el cache por defecto borramos los elementos.
                     return caches.delete(key); //borramos los elementos guardados.
                 }
             }));
         })
     );
+
 });
 
 /**
@@ -46,10 +58,37 @@ self.addEventListener('activate', evt => {
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request).then(response=>{
-            console.log(event);
+            //console.log(event);
             //si existe retornamos la petición desde el cache, de lo contrario (retorna undefined) dejamos pasar la solicitud al servidor,
             // lo hacemos con la función fetch pasando un objeto de petición.
-            return response || fetch(event.request);
+            // caches.open(CACHE_NAME)
+            //     .then( cache => cache.put(event.request, response) );
+            if (navigator.onLine){
+                // return caches.open(CACHE_NAME).then(function (cache) {
+                //     return fetch(event.request).then(function (response) {
+                //         return cache.put(event.request, response.clone()).then(function () {
+                //             return response;
+                //         });
+                //     });
+                // });
+                //console.log(event.request);
+                caches.open(CACHE_NAME).then(function (cache){
+                    fetch(event.request).then(function (response){
+                        console.log(response.url);
+                        if (response.url.toString() === "http://localhost:7001/user/dashboard"){
+                            cache.put(event.request, response.clone()).then(function (){
+
+                            })
+                        }
+                    })
+                })
+
+                return fetch(event.request);
+
+            }else if (!navigator.onLine){
+                return response || fetch(event.request);
+            }
+            // return response || fetch(event.request);
         }).catch(function (){ //En caso de tener un problema con la red, se mostrará el caso
             return caches.match(fallback);
         })
