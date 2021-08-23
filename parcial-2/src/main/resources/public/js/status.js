@@ -2,6 +2,9 @@ window.addEventListener('offline', StatusOn_Off);
 
 function StatusOn_Off(ev){
     const status = navigator.onLine ? "Online" : "Offline";
+    if(status === "Offline"){
+        urlList();
+    }
     changeHtml(status);
 }
 function changeHtml(status){

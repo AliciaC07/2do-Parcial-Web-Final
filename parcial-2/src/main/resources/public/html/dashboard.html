@@ -17,7 +17,7 @@
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
+        <div class="container-fluid" id="content">
             <a class="navbar-brand" href="/shortener">Url shortener</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -67,19 +67,19 @@
                                     <div class="my-2 mx-auto card text-start col-md-3 number-url-card border-0">
                                         <div class="container-fluid mr-1 my-1">
                                             <h3 class="titleFont text-muted">All Url</h3>
-                                            <strong>$userLogged.urls.size()</strong>
+                                            <strong id="size">$userLogged.urls.size()</strong>
                                         </div>
                                     </div>
                                     <div class="my-2 mx-auto card text-start col-md-3 total-clicks-card border-0">
                                         <div class="container-fluid mr-1 my-1">
                                             <h3 class="titleFont text-muted">Total Clicks</h3>
-                                            <strong>$totalClicks</strong>
+                                            <strong id="totClicks">$totalClicks</strong>
                                         </div>
                                     </div>
                                     <div class="my-2 mx-auto card text-start col-md-3 added-this-month-card border-0">
                                         <div class="container-fluid mr-1 my-1">
                                             <h3 class="titleFont text-muted">Links added this month</h3>
-                                            <strong>$totalMonth</strong>
+                                            <strong id="totMonth">$totalMonth</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                             <form  id="shortUrl" >
                                 <div class=" input-group input-group-lg ">
                                     <input type="text" name="originalUrl" id="url" class="form-control" placeholder="Insert your long url here to shorten it" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                    <button class="btn btn-outline-primary" type="submit"  id="button-addon2">Shorten</button>
+                                    <button class="btn btn-outline-primary" type="submit" onclick="addUrl()" id="button-addon2">Shorten</button>
                                     <button class="btn btn-outline-primary" type="button" onclick="addUrl()"  id="saveBrowser">Shorten</button>
                                 </div>
                             </form>
@@ -116,8 +116,8 @@
                     <div class="row">
                         <div class="col-md-2"></div>
                         <div class="col-md card mt-3">
-                            <div class="card-body">
-                                <h5 class="card-title titleFont text-muted">Urls</h5>
+                            <div class="card-body" id="car-urls">
+                                <h5 class="card-title titleFont text-muted" id="prue">Urls</h5>
                                 #foreach($url in $urls)
                                 <div class="card mt-3">
                                     <div class="card-body">
