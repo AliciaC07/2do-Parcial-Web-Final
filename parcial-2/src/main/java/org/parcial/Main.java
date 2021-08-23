@@ -24,6 +24,7 @@ public class Main {
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
+
         });
         org.parcial.services.BootStrapService.startDb();
         new SoapController(app).applyRoutes();

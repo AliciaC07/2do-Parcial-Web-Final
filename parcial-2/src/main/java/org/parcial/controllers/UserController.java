@@ -168,7 +168,7 @@ public class UserController {
                 model.put("url", url);
                 model.put("osGraph", new Gson().toJson(visitService.getQuantityByOperatingSystem(url.getId())));
                 model.put("browserGraph", new Gson().toJson(visitService.getQuantityByBrowser(url.getId())));
-                ctx.render("public/html/infoUrl.vm", model);
+                ctx.render("public/html/infoUrl.html", model);
             });
 
             app.get("/user/users", ctx -> {
