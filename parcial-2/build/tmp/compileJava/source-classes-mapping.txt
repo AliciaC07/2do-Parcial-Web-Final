@@ -104,6 +104,8 @@ org/parcial/config/JwtGen.java
  org.parcial.config.JwtGen
 org/parcial/controllers/UserController.java
  org.parcial.controllers.UserController
+org/parcial/models/dto/ClientDBDto.java
+ org.parcial.models.dto.ClientDBDto
 org/parcial/controllers/WebSocketController.java
  org.parcial.controllers.WebSocketController
  org.parcial.controllers.WebSocketController$1
