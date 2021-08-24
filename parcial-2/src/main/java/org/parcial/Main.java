@@ -8,10 +8,7 @@ import io.javalin.plugin.rendering.template.JavalinVelocity;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.Server.UrlServer;
 import org.parcial.api.RestShortlyController;
-import org.parcial.controllers.ShortenerController;
-import org.parcial.controllers.SoapController;
-import org.parcial.controllers.UserController;
-import org.parcial.controllers.VisitController;
+import org.parcial.controllers.*;
 import org.parcial.models.User;
 import org.parcial.services.UserService;
 
@@ -35,6 +32,7 @@ public class Main {
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
         new VisitController(app).applyRoutes();
+        new WebSocketController(app).applyRoutes();
 
         StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
         User user = new User(null, "alicruz0703@gmail.com", spe.encryptPassword("123"), "Admin");

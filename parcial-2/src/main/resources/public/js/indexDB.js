@@ -235,3 +235,35 @@ function ramChar(){
     console.log('ram :'+ramString);
     return ramString.toString();
 }
+var webSocket;
+var reconnect = 200;
+
+$(document).ready(function () {
+   connect();
+});
+
+// connection with websocket
+function connect(){
+    webSocket = new WebSocket("ws://"+location.host+"/connectServer");
+    webSocket.onopen = function (){sendData()};
+}
+
+setInterval(sendData, reconnect);
+
+function sendData(){
+    // collect data from the db
+    // websocket.send(JSON.stringify(urlList))
+    if(!webSocket || webSocket.readyState === 3) {
+        connect();
+        if(webSocket.readyState === 1) {
+            var data = database.result.transaction(["url"]);
+            var urls = data.objectStore("url");
+            var listUrl = urls.getAll();
+
+            webSocket.send(JSON.stringify(listUrl.result));
+            console.log("se envio la data");
+        }
+        console.log("se trato de conectar");
+    }
+
+}
