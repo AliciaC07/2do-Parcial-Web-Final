@@ -1,12 +1,15 @@
 window.addEventListener('offline', StatusOn_Off);
 window.addEventListener('online', StatusOn_Off);
-let webSocket;
+var webSocket;
 
 function StatusOn_Off(ev){
     const status = navigator.onLine ? "Online" : "Offline";
     if(status === "Offline"){
         urlList();
-        webSocket.close();
+        if (webSocket != null){
+            webSocket.close();
+        }
+
     }else
         sendData();
     changeHtml(status);
@@ -39,6 +42,7 @@ function sendData(){
             let data = database.result.transaction(["url"],"readwrite");
             let url = data.objectStore("url");
             let listUrl = [];
+            console.log(ev.data);
 
             if(ev.data === "1"){
                 url.openCursor().onsuccess = function (ev){
@@ -62,10 +66,12 @@ function sendData(){
                             let request = cursor.update(update);
                             request.onsuccess = function (){}
                             //request.oncomplete = function (){
-                                cursor.continue();
+
                             //}
                         }
+                        cursor.continue();
                     }
+
                 }
                 data.oncomplete = function (){
                     console.log("updated inServer from server");

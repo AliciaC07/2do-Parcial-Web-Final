@@ -25,6 +25,7 @@ import java.util.List;
 public class WebSocketController extends BaseController{
     public static List<Session> users = new ArrayList<>();
     private String domain = "shortly.traki-tech.games/";
+    private UrlService urlService = UrlService.getInstance();
 
     public WebSocketController(Javalin app) {
         super(app);
@@ -36,7 +37,7 @@ public class WebSocketController extends BaseController{
             wsHandler.onConnect(ctx -> {
                 users.add(ctx.session);
                 System.out.println("user con-cantidad de usuarios " + users.size());
-                ctx.send(1);
+                sendMessage2(1);
             });
 
             wsHandler.onMessage(ctx -> {
@@ -45,8 +46,8 @@ public class WebSocketController extends BaseController{
                 System.out.println("llego un mensaje");
                 Type type = new TypeToken<List<ClientDBDto>>(){}.getType();
                 List<ClientDBDto> urls = new Gson().fromJson(ctx.message(),type);
-                addUrls(parseResponse(urls));
-                ctx.send(2);
+                System.out.println(new Gson().toJson(urls));
+                sendMessage(2, urls);
             });
 
             wsHandler.onClose(ctx -> {
@@ -57,16 +58,34 @@ public class WebSocketController extends BaseController{
 
             wsHandler.onError(ctx -> {
                 System.out.println("An error occurred "+ ctx.error());
-                System.out.println("An error occurred "+ ctx.error());
-                //users.remove(ctx.session);
             });
         });
     }
 
     private void addUrls(List<Url> urls){
         for (Url url: urls) {
-            UrlService.getInstance().create(url);
-            System.out.println(new Gson().toJson(url));
+            urlService.create(url);
+
+        }
+
+    }
+    public void sendMessage(Integer message, List<ClientDBDto> urls){
+        addUrls(parseResponse(urls));
+        for(Session sessionConnected : users){
+            try {
+                sessionConnected.getRemote().sendString(Integer.toString(message));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void sendMessage2(Integer message){
+        for(Session sessionConnected : users){
+            try {
+                sessionConnected.getRemote().sendString(Integer.toString(message));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
