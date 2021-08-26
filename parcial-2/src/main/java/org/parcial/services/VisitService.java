@@ -48,11 +48,12 @@ public class VisitService extends Repository<Visit> {
 
     }
     //select OPERATINGSYSTEM, count(ID) as Cantidad from VISIT  group by VISIT.OPERATINGSYSTEM
-    public List<VisitOperatingSystemDto> getQuantityByOperatingSystem(){
+    public List<VisitOperatingSystemDto> getQuantityByOperatingSystem(Integer id){
         List<Object[]> visit = new ArrayList<>();
         List<VisitOperatingSystemDto> visitsQuantity = new ArrayList<>();
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createQuery("select p.operatingSystem, count(p.id) as Cantidad from Visit p group by p.operatingSystem");
+        Query query = entityManager.createQuery("select p.operatingSystem, count(p.id) as Cantidad from Visit p where p.urlVisit.id = :idUrl  group by p.operatingSystem");
+        query.setParameter("idUrl", id);
         visit = query.getResultList();
         if (visit.isEmpty()){
             VisitOperatingSystemDto v = new VisitOperatingSystemDto();
@@ -73,11 +74,12 @@ public class VisitService extends Repository<Visit> {
 
 
     }
-    public List<VisitBrowserDto> getQuantityByBrowser(){
+    public List<VisitBrowserDto> getQuantityByBrowser(Integer id){
         List<Object[]> visit = new ArrayList<>();
         List<VisitBrowserDto> visitsQuantity = new ArrayList<>();
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createQuery("select p.browser, count(p.id) as Cantidad from Visit p group by p.browser");
+        Query query = entityManager.createQuery("select p.browser, count(p.id) as Cantidad from Visit p where p.urlVisit.id = :idUrl group by p.browser");
+        query.setParameter("idUrl", id);
         visit = query.getResultList();
         if (visit.isEmpty()){
             VisitBrowserDto v = new VisitBrowserDto();

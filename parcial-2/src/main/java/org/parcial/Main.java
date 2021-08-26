@@ -6,27 +6,34 @@ import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinVelocity;
 import org.jasypt.util.password.StrongPasswordEncryptor;
-import org.parcial.controllers.ShortenerController;
-import org.parcial.controllers.UserController;
-import org.parcial.controllers.VisitController;
+import org.parcial.Server.UrlServer;
+import org.parcial.api.RestShortlyController;
+import org.parcial.controllers.*;
 import org.parcial.models.User;
 import org.parcial.services.UserService;
 
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, WriterException {
+    public static void main(String[] args) throws IOException, WriterException,InterruptedException {
         Javalin app = Javalin.create(config -> {
             config.registerPlugin(new RouteOverviewPlugin("/public"));
             config.addStaticFiles("/public");
             config.enableCorsForAllOrigins();
             JavalinRenderer.register(JavalinVelocity.INSTANCE, ".html");
-        }).start(7001);
+
+        });
         org.parcial.services.BootStrapService.startDb();
+        new SoapController(app).applyRoutes();
+        new RestShortlyController(app).applyRoutes();
+        app.start(7001);
+
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
         new UserController(app).applyRoutes();
         new ShortenerController(app).applyRoutes();
         new VisitController(app).applyRoutes();
+        new WebSocketController(app).applyRoutes();
+
         StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
         User user = new User(null, "alicruz0703@gmail.com", spe.encryptPassword("123"), "Admin");
         UserService.getInstance().create(user);
@@ -51,6 +58,10 @@ public class Main {
             //System.out.println("Enviando el header de seguridad para el Service Worker");
             ctx.header("Service-Worker-Allowed", "/");
         });
+
+        UrlServer server = new UrlServer();
+        server.start();
+        server.blockUntilShutdown();
 
 
 
