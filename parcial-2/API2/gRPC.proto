@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package url;
+
+// request -> /api/urls/:id
+message UrlRequest {
+  int32 id=1;
+}
+// response -> Url[]
+message UrlResponse{
+  string urls=1;
+}
+
+// request -> /api/url-create
+message CreateUrlRequest{
+  int32 idUser=1;
+  string originalUrl=2;
+}
+
+//response -> Url
+message CreateUrlResponse{
+  string url=1;
+}
+
+// request -> /api/visits-info/:id
+message UrlInfoRequest{
+  int32 id=1;
+}
+
+//response -> Info
+message UrlInfoResponse{
+  string infoUrl=1;
+}
+
+service UrlService{
+  rpc getAllUrl (UrlRequest) returns (UrlResponse);
+  rpc createUrl (CreateUrlRequest) returns (CreateUrlResponse);
+  rpc getUrlInfo (UrlInfoRequest) returns (UrlInfoResponse);
+}
