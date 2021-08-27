@@ -57,7 +57,7 @@ public class WebSocketController extends BaseController{
 
             wsHandler.onError(ctx -> {
                 System.out.println("An error occurred "+ ctx.error());
-                System.out.println("An error occurred "+ ctx.error());
+                //System.out.println("An error occurred "+ ctx.error());
                 //users.remove(ctx.session);
             });
         });
