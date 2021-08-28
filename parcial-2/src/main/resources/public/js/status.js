@@ -4,7 +4,6 @@ var webSocket;
 var domainShort = "shortly.traki-tech.games";
 function StatusOn_Off(ev){
     const status = navigator.onLine ? "Online" : "Offline";
-    changeHtml(status);
     if(status === "Offline"){
         urlList();
         if (webSocket != null){
@@ -14,6 +13,7 @@ function StatusOn_Off(ev){
     }else{
         sendData();
     }
+    changeHtml(status);
 
 
 }
