@@ -1,7 +1,6 @@
 window.addEventListener('offline', StatusOn_Off);
 window.addEventListener('online', StatusOn_Off);
 var webSocket;
-var domainShort = "shortly.traki-tech.games";
 function StatusOn_Off(ev){
     const status = navigator.onLine ? "Online" : "Offline";
     if(status === "Offline"){
@@ -36,7 +35,7 @@ function changeHtml(status){
 }
 
 function sendData(){
-    webSocket = new WebSocket("wss://"+domainShort+"/connectServer");
+    webSocket = new WebSocket("ws://"+location.host+"/connectServer");
     webSocket.onopen = function (ev){
         console.log("ws abierto");
     }
