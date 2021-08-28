@@ -11,8 +11,10 @@ function StatusOn_Off(ev){
             webSocket.close();
         }
 
-    }else
+    }else{
         sendData();
+    }
+
 
 }
 function changeHtml(status){
