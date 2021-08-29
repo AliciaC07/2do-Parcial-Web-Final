@@ -41,6 +41,7 @@ public class SoapShortly {
     public UrlDto createUrl(String originalUrl, Integer id) throws IOException, WriterException, InterruptedException {
         Url urlnew = new Url();
         UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
+        urlnew.setCompleteUrl(originalUrl);
         String shortened = urlEncodeShort.encodeUrl(originalUrl);
         urlnew.setOriginalUrl(urlEncodeShort.decodeUrl(shortened));
         urlnew.setCuttedUrl(shortened);

@@ -72,12 +72,12 @@ public class ShortenerController {
 
 
             });
-            app.before("/:hash",ctx -> {
-                String has = ctx.pathParam("hash");
-               if (has.isEmpty() || has.equals("shortener")){
-                   ctx.redirect("/shortener/shorty");
-               }
-            });
+//            app.before("/:hash",ctx -> {
+//                String has = ctx.pathParam("hash");
+//               if (has.isEmpty() || has.equals("shortener") || has.equals("shortener/shorty") || has.equals("user/dashboard") || has.equals("favicon.ico")){
+//                   ctx.redirect("/shortener/shorty");
+//               }
+//            });
 
             app.get("/shortener/shorty", ctx -> {
                     Map<String, Object> model = new HashMap<>();
@@ -118,6 +118,7 @@ public class ShortenerController {
                     String originalUrl = ctx.formParam("originalUrl");
                     UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
                     Url url = new Url();
+                    url.setCompleteUrl(originalUrl);
                     String shortened = urlEncodeShort.encodeUrl(originalUrl);
                     url.setOriginalUrl(urlEncodeShort.decodeUrl(shortened));
                     url.setCuttedUrl(shortened);
@@ -171,8 +172,7 @@ public class ShortenerController {
                     if (url == null){
                         ctx.redirect("/shortener/shorty");
 
-
-                    }else {
+                    }else{
                         String userAgent = ctx.userAgent();
                         UserAgent userAgentP = UserAgent.parseUserAgentString(userAgent);
 
@@ -187,11 +187,12 @@ public class ShortenerController {
                         visit.setDate(LocalDate.now());
                         visit.setTime(LocalTime.now());
                         visitService.create(visit);
-                        ctx.redirect("https://"+url.getOriginalUrl());
-
+                        ctx.redirect(url.getCompleteUrl());
                     }
 
-                });
+
+            });
+
 
 
         });

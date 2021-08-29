@@ -30,9 +30,9 @@ public class Main {
 
         //app.get("/", ctx -> ctx.result("Hola Mundo en Javalin :-D"));
         new UserController(app).applyRoutes();
-        new ShortenerController(app).applyRoutes();
         new VisitController(app).applyRoutes();
         new WebSocketController(app).applyRoutes();
+        new ShortenerController(app).applyRoutes();
 
         StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
         User user = new User(null, "alicruz0703@gmail.com", spe.encryptPassword("123"), "Admin");

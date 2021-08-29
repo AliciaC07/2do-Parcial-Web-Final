@@ -96,6 +96,7 @@ function buildTable(urlsList){
                 "                                    </div>\n" +
                 "                                </div>"
         }else {
+            var identi = "identi"+urlsList[id].id;
             prue += "<div class=\"card mt-3\">\n" +
                 "                                    <div class=\"card-body\">\n" +
                 "                                        <div class=\"row\">\n" +
@@ -124,7 +125,7 @@ function buildTable(urlsList){
                 "                                    </div>\n" +
                 "                                    <div class=\"card-footer text-end\">\n" +
                 "                                        <a class=\"btn btn-sm btn-primary\" href='../html/offline.html'>Info</a>\n" +
-                "                                        <a class=\"btn btn-sm btn-danger\" onclick='deleteUrl()'>Delete</a>\n" +
+                "                                        <a class=\"btn btn-sm btn-danger\" onclick='deleteUrl(\""+identi+"\")'>Delete</a>\n" +
                 "                                    </div>\n" +
                 "                                </div>"
         }
@@ -175,8 +176,8 @@ function addUrl(){
 
 
 }
-function deleteUrl(){
-    let id = document.getElementById("identi").value;
+function deleteUrl(idd){
+    let id = document.getElementById(idd).value;
     console.log(id);
     const data = database.result.transaction(["url"], "readwrite");
     const url = data.objectStore("url");

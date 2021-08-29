@@ -48,6 +48,7 @@ public class gRPCshortlyController  extends UrlServiceGrpc.UrlServiceImplBase {
         ModelMapper modelMapper = new ModelMapper();
         org.parcial.models.Url url = new org.parcial.models.Url();
         UrlDto urlDto;
+        url.setCompleteUrl(request.getOriginalUrl());
         url.setOriginalUrl(request.getOriginalUrl());
         UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
         url.setCuttedUrl(urlEncodeShort.encodeUrl(url.getOriginalUrl()));

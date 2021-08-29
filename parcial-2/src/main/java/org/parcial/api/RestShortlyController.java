@@ -45,6 +45,7 @@ public class RestShortlyController extends BaseController {
             app.post("/api/url-create", ctx -> {
                 UrlDto originalUrl = ctx.bodyAsClass(UrlDto.class);
                 Url url = new Url();
+                url.setCompleteUrl(originalUrl.getOriginalUrl());
                 System.out.println(url.getOriginalUrl());
                 UrlEncodeShort urlEncodeShort = new UrlEncodeShort();
                 String shortened = urlEncodeShort.encodeUrl(originalUrl.getOriginalUrl());

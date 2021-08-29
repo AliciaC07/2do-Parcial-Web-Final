@@ -34,6 +34,9 @@ public class Url implements Serializable {
     @Column
     private LocalDate dateAdded;
 
+    @Column
+    private String completeUrl;
+
 
     @OneToMany(mappedBy = "urlVisit", fetch = FetchType.EAGER)
     private Set<Visit> visits = new HashSet<>();
