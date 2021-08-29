@@ -4,7 +4,6 @@ var urlsToCache = [
     '/',
     '/Fonts/Inconsolata/static/Inconsolata_Condensed/Inconsolata_Condensed-Bold.ttf',
     '/Fonts/Alfa_Slab_One/AlfaSlabOne-Regular.ttf',
-    '/favicon.ico',
     '/css/dashboard.css',
     '/css/fonts.css',
     '/css/landing.css',
