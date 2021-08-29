@@ -168,7 +168,11 @@ public class ShortenerController {
             app.get("/:keyHash", ctx -> {
                     String shorted = ctx.pathParam("keyHash");
                     Url url = urlService.findUrlByHash(shorted);
-                    if (url != null){
+                    if (url == null){
+                        ctx.redirect("/shortener/shorty");
+
+
+                    }else {
                         String userAgent = ctx.userAgent();
                         UserAgent userAgentP = UserAgent.parseUserAgentString(userAgent);
 
@@ -184,11 +188,6 @@ public class ShortenerController {
                         visit.setTime(LocalTime.now());
                         visitService.create(visit);
                         ctx.redirect("https://"+url.getOriginalUrl());
-
-
-                    }else {
-                        ////como no existe redirecionarlo al home
-                        ctx.redirect("/shortener/shorty");
 
                     }
 
