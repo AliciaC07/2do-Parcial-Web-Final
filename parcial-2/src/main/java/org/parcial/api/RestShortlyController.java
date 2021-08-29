@@ -72,7 +72,7 @@ public class RestShortlyController extends BaseController {
                 infoDto.setVisitOperatingSystemDto(visitService.getQuantityByOperatingSystem(id));
                 ctx.json(infoDto);
             });
-            app.post("/login-rest", ctx -> {
+            app.post("/api-rest/login-rest", ctx -> {
                 System.out.println(ctx.body());
                 System.out.println(ctx.bodyAsClass(LoginDto.class));
                 LoginDto userLogin = ctx.bodyAsClass(LoginDto.class);
