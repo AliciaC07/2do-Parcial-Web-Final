@@ -35,7 +35,7 @@ function changeHtml(status){
 }
 
 function sendData(){
-    webSocket = new WebSocket("wss://"+location.host+":"+location.port+"/connectServer");
+    webSocket = new WebSocket("ws://"+location.host+"/connectServer");
     webSocket.onopen = function (ev){
         console.log("ws abierto");
     }

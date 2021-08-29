@@ -15,6 +15,7 @@ import io.jsonwebtoken.JwtException;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.parcial.config.JwtGen;
 import org.parcial.models.User;
+import org.parcial.models.dto.InfoDto;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,6 +34,7 @@ import java.util.Base64;
 
 public class Principal {
     private static Principal principal = null;
+    private VisitService visitService = VisitService.getInstance();
 
     StrongPasswordEncryptor spe = new StrongPasswordEncryptor();
 
@@ -170,6 +172,13 @@ public class Principal {
 
         return jsonObject.get("image").getAsString();
 
+    }
+
+    public InfoDto getStatics(Integer id){
+        InfoDto infoDto = new InfoDto();
+        infoDto.setVisitBrowserDto(visitService.getQuantityByBrowser(id));
+        infoDto.setVisitOperatingSystemDto(visitService.getQuantityByOperatingSystem(id));
+        return infoDto;
     }
 
 }

@@ -22,7 +22,7 @@ public class ShortenerController {
     private UrlService urlService = UrlService.getInstance();
     private VisitService visitService = VisitService.getInstance();
     private CookieVerificationService cookieVerificationService = CookieVerificationService.getInstance();
-    private String domain = "shortly.traki-tech.games/";
+    private String domain = "localhost:7001/";
 
     public ShortenerController(Javalin app) {
         this.app = app;
@@ -74,7 +74,6 @@ public class ShortenerController {
             });
             app.before("/:hash",ctx -> {
                 String has = ctx.pathParam("hash");
-                System.out.println(has);
                if (has.isEmpty() || has.equals("shortener")){
                    ctx.redirect("/shortener/shorty");
                }
@@ -185,13 +184,14 @@ public class ShortenerController {
                         visit.setTime(LocalTime.now());
                         visitService.create(visit);
 
-                        ctx.redirect("https://"+url.getOriginalUrl());
 
                     }else {
                         ////como no existe redirecionarlo al home
                         ctx.redirect("/shortener/shorty");
 
                     }
+                assert url != null;
+                ctx.redirect("https://"+url.getOriginalUrl());
 
                 });
 

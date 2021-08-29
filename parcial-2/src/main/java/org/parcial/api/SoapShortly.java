@@ -31,7 +31,11 @@ public class SoapShortly {
     @WebMethod
     public List<UrlDto> getUrlsByUser(Integer id){
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(urlService.findAllUrlByUserActiveTrue(id), new TypeToken<List<UrlDto>>() {}.getType());
+        List<UrlDto> urls = modelMapper.map(urlService.findAllUrlByUserActiveTrue(id), new TypeToken<List<UrlDto>>() {}.getType());
+        for (var url: urls) {
+            url.setInfoDto(principal.getStatics(url.getId()));
+        }
+        return urls;
     }
     @WebMethod
     public UrlDto createUrl(String originalUrl, Integer id) throws IOException, WriterException, InterruptedException {

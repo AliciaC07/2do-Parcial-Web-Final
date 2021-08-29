@@ -35,8 +35,11 @@ public class RestShortlyController extends BaseController {
             app.get("/api/urls/:id", ctx -> {
                 Integer id = ctx.pathParam("id", Integer.class).get();
                 ModelMapper modelMapper = new ModelMapper();
-                List<UrlDto> urlDtos = modelMapper.map(urlService.findAllUrlByUserActiveTrue(id), new TypeToken<List<UrlDto>>() {}.getType());
-                ctx.json(urlDtos);
+                List<UrlDto> urls = modelMapper.map(urlService.findAllUrlByUserActiveTrue(id), new TypeToken<List<UrlDto>>() {}.getType());
+                for (var url: urls) {
+                    url.setInfoDto(principal.getStatics(url.getId()));
+                }
+                ctx.json(urls);
             });
 
             app.post("/api/url-create", ctx -> {

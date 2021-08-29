@@ -34,6 +34,9 @@ public class gRPCshortlyController  extends UrlServiceGrpc.UrlServiceImplBase {
     public void getAllUrl(Url.UrlRequest request, StreamObserver<Url.UrlResponse> responseObserver) {
         ModelMapper modelMapper = new ModelMapper();
         List<UrlDto> urlDtos = modelMapper.map(urlService.findAllUrlByUserActiveTrue(request.getId()), new TypeToken<List<UrlDto>>() {}.getType());
+        for (var url: urlDtos) {
+            url.setInfoDto(principal.getStatics(url.getId()));
+        }
 
         responseObserver.onNext(parseAllUrl(urlDtos));
         responseObserver.onCompleted();

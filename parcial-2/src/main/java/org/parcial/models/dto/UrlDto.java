@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.parcial.models.User;
 import org.parcial.models.Visit;
+import org.parcial.services.Principal;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,8 @@ public class UrlDto {
     private String dateAdded;
 
     private String preview;
+
+    private InfoDto infoDto;
 
 
     private Set<VisitDto> visits = new HashSet<>();
