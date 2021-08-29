@@ -183,6 +183,7 @@ public class ShortenerController {
                         visit.setDate(LocalDate.now());
                         visit.setTime(LocalTime.now());
                         visitService.create(visit);
+                        ctx.redirect("https://"+url.getOriginalUrl());
 
 
                     }else {
@@ -190,7 +191,6 @@ public class ShortenerController {
                         ctx.redirect("/shortener/shorty");
 
                     }
-                ctx.redirect("https://"+url.getOriginalUrl());
 
                 });
 
