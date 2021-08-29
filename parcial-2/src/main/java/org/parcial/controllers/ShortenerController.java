@@ -190,7 +190,6 @@ public class ShortenerController {
                         ctx.redirect("/shortener/shorty");
 
                     }
-                assert url != null;
                 ctx.redirect("https://"+url.getOriginalUrl());
 
                 });
