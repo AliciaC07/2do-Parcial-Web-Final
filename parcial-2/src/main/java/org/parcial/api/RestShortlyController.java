@@ -73,7 +73,9 @@ public class RestShortlyController extends BaseController {
                 ctx.json(infoDto);
             });
             app.post("/login-rest", ctx -> {
+                System.out.println(ctx.bodyAsClass(LoginDto.class));
                 LoginDto userLogin = ctx.bodyAsClass(LoginDto.class);
+                System.out.println(userLogin.getUserName()+userLogin.getPassword());
                 User user = userService.authUser(userLogin.getUserName(), userLogin.getPassword());
                 if (user != null){
                     UserLogin userLogin1 = new UserLogin();
