@@ -72,12 +72,12 @@ public class ShortenerController {
 
 
             });
-//            app.before("/:hash",ctx -> {
-//                String has = ctx.pathParam("hash");
-//               if (has.isEmpty() || has.equals("shortener") || has.equals("shortener/shorty") || has.equals("user/dashboard") || has.equals("favicon.ico")){
-//                   ctx.redirect("/shortener/shorty");
-//               }
-//            });
+            app.before("/:hash",ctx -> {
+                String has = ctx.pathParam("hash");
+                if (has.isEmpty() || has.equals("shortener")){
+                    ctx.redirect("/shortener/shorty");
+                }
+            });
 
             app.get("/shortener/shorty", ctx -> {
                     Map<String, Object> model = new HashMap<>();
@@ -167,29 +167,31 @@ public class ShortenerController {
                 });
 
             app.get("/:keyHash", ctx -> {
-                    String shorted = ctx.pathParam("keyHash");
-                    Url url = urlService.findUrlByHash(shorted);
-                    if (url == null){
-                        ctx.redirect("/shortener/shorty");
+                String shorted = ctx.pathParam("keyHash");
+                Url url = urlService.findUrlByHash(shorted);
+                if (url != null){
+                    String userAgent = ctx.userAgent();
+                    UserAgent userAgentP = UserAgent.parseUserAgentString(userAgent);
 
-                    }else{
-                        String userAgent = ctx.userAgent();
-                        UserAgent userAgentP = UserAgent.parseUserAgentString(userAgent);
+                    System.out.println(userAgentP.getOperatingSystem());
+                    System.out.println(userAgentP.getBrowser());
+                    Visit visit = new Visit();
+                    visit.setUrlVisit(url);
+                    visit.setBrowser(userAgentP.getBrowser().getName());
+                    visit.setOperatingSystem(userAgentP.getOperatingSystem().getName());
+                    visit.setIp(ctx.ip());
+                    System.out.println(ctx.ip());
+                    visit.setDate(LocalDate.now());
+                    visit.setTime(LocalTime.now());
+                    visitService.create(visit);
+                    ctx.redirect("https://"+url.getOriginalUrl());
 
-                        System.out.println(userAgentP.getOperatingSystem());
-                        System.out.println(userAgentP.getBrowser());
-                        Visit visit = new Visit();
-                        visit.setUrlVisit(url);
-                        visit.setBrowser(userAgentP.getBrowser().getName());
-                        visit.setOperatingSystem(userAgentP.getOperatingSystem().getName());
-                        visit.setIp(ctx.ip());
-                        System.out.println(ctx.ip());
-                        visit.setDate(LocalDate.now());
-                        visit.setTime(LocalTime.now());
-                        visitService.create(visit);
-                        ctx.redirect(url.getCompleteUrl());
-                    }
 
+                }else {
+                    ////como no existe redirecionarlo al home
+                    ctx.redirect("/shortener/shorty");
+
+                }
 
             });
 
